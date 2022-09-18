@@ -3,9 +3,12 @@ import Foundation
 /// A type that contributes to the object graph.
 public struct Component {
     let name: String
-    let resolve: () -> Injectable
+    let resolve: () -> Any
 
-    public init<T: InjectionKey>(_ name: T.Type, _ resolve: @escaping () -> Injectable) {
+    public init<T: InjectionKey, U>(
+        _ name: T.Type,
+        _ resolve: @escaping () -> U
+    ) where T.Value == U {
         self.name = String(describing: name)
         self.resolve = resolve
     }
@@ -26,7 +29,7 @@ public class Container {
     /// Resolves through inference and returns an instance of the given type from the current default container.
     ///
     /// If the dependency is not found, an exception will occur.
-    public static func resolve<T>(for type: Any.Type?) -> T {
+    static func resolve<T>(for type: Any.Type?) -> T {
         let name = type.map { String(describing: $0) } ?? String(describing: T.self)
 
         guard let component: T = root.modules[name]?.resolve() as? T else {
@@ -36,7 +39,7 @@ public class Container {
         return component
     }
     
-    public static var root = Container()
+    static var root = Container()
     
     /// Construct dependency resolutions.
     public convenience init(@ContainerBuilder _ modules: () -> [Component]) {

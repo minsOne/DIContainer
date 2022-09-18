@@ -9,7 +9,7 @@ protocol Service {
     func doSomething()
 }
 
-struct ServiceImpl: Service, Injectable {
+struct ServiceImpl: Service {
     func doSomething() {
         print("Doing something...")
     }

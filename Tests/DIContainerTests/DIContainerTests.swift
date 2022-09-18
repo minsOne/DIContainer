@@ -7,6 +7,7 @@ final class DIContainerTests: XCTestCase {
         
         let container = Container {
             Component(ServiceKey.self) { ServiceImpl() }
+//            Component(ServiceKey.self) { Int(10) }
         }
         container.build()
     }
@@ -16,5 +17,6 @@ final class DIContainerTests: XCTestCase {
         var service: Service
         
         service.doSomething()
+        _ = ServiceKey.currentValue
     }
 }
