@@ -2,21 +2,29 @@ import XCTest
 @testable import DIContainer
 
 final class DIContainerTests: XCTestCase {
-    override class func setUp() {
+    let mock: MockServiceImpl = .init()
+
+    override func setUp() {
         super.setUp()
-        
-        let container = Container {
-            Component(ServiceKey.self) { ServiceImpl() }
-//            Component(ServiceKey.self) { Int(10) }
+
+        let mock = self.mock
+
+        Container {
+            Component(MockServiceKey.self) { mock }
         }
-        container.build()
+        .build()
+    }
+
+    func test_컨테이너_등록여부_확인() {
+        XCTAssertNotNil(MockServiceKey.module?.resolve() as? MockServiceKey.Value)
+        XCTAssertNotNil(MockServiceKey.module?.resolve() as? MockService)
     }
     
-    func testRegistedService() {
-        @Inject(ServiceKey.self)
-        var service: Service
+    func test_Inject동작확인() {
+        @Inject(MockServiceKey.self)
+        var service: MockService
         
         service.doSomething()
-        _ = ServiceKey.currentValue
+        XCTAssertEqual(mock.count, 1)
     }
 }

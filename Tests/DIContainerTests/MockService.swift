@@ -1,16 +1,19 @@
 import DIContainer
 import Foundation
 
-struct ServiceKey: InjectionKey {
-    var type: Service?
+struct MockServiceKey: InjectionKey {
+    var type: MockService?
 }
 
-protocol Service {
+protocol MockService {
     func doSomething()
 }
 
-struct ServiceImpl: Service {
+class MockServiceImpl: MockService {
+    var count = 0
+
     func doSomething() {
         print("Doing something...")
+        count += 1
     }
 }
