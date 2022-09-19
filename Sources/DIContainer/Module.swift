@@ -1,7 +1,7 @@
 import Foundation
 
 /// A type that contributes to the object graph.
-public struct Component {
+public struct Module {
     let name: String
     let resolve: () -> Any
 

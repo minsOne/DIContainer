@@ -10,7 +10,7 @@ final class DIContainerTests: XCTestCase {
         let mock = self.mock
 
         Container {
-            Component(MockServiceKey.self) { mock }
+            Module(MockServiceKey.self) { mock }
         }
         .build()
     }

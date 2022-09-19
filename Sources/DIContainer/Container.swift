@@ -2,13 +2,13 @@ import Foundation
 
 public class Container {
     /// Stored object instance factories.
-    var modules: [String: Component] = [:]
+    var modules: [String: Module] = [:]
     
     public init() {}
     deinit { modules.removeAll() }
     
     /// Registers a specific type and its instantiating factory.
-    func add(module: Component) {
+    func add(module: Module) {
         modules[module.name] = module
     }
     
@@ -28,13 +28,13 @@ public class Container {
     static var root = Container()
     
     /// Construct dependency resolutions.
-    public convenience init(@ContainerBuilder _ modules: () -> [Component]) {
+    public convenience init(@ContainerBuilder _ modules: () -> [Module]) {
         self.init()
         modules().forEach { add(module: $0) }
     }
 
     /// Construct dependency resolution.
-    public convenience init(@ContainerBuilder _ module: () -> Component) {
+    public convenience init(@ContainerBuilder _ module: () -> Module) {
         self.init()
         add(module: module())
     }
@@ -47,7 +47,8 @@ public class Container {
 
     /// DSL for declaring modules within the container dependency initializer.
     @resultBuilder public struct ContainerBuilder {
-        public static func buildBlock(_ modules: Component...) -> [Component] { modules }
-        public static func buildBlock(_ module: Component) -> Component { module }
+        public static func buildBlock(_ modules: Module...) -> [Module] { modules }
+        public static func buildBlock(_ module: Module) -> Module { module }
+        public static func buildEither(first module: Module) -> Module { module }
     }
 }

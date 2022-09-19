@@ -2,7 +2,7 @@
 import Foundation
 
 extension InjectionKey {
-    static var module: Component? {
+    static var module: Module? {
         Container.root.modules[String(describing: Self.self)]
     }
 }
