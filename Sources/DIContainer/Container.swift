@@ -11,7 +11,7 @@ public class Container {
     func add(module: Module) {
         modules[module.name] = module
     }
-    
+
     /// Resolves through inference and returns an instance of the given type from the current default container.
     ///
     /// If the dependency is not found, an exception will occur.
@@ -25,6 +25,15 @@ public class Container {
         return component
     }
     
+    /// Resolves through inference and returns an instance of the given type from the current default container.
+    ///
+    /// If the dependency is not found, return nil
+    static func weakResolve<T>(for type: Any.Type?) -> T? {
+        let name = type.map { String(describing: $0) } ?? String(describing: T.self)
+
+        return root.modules[name]?.resolve() as? T
+    }
+
     static var root = Container()
     
     /// Construct dependency resolutions.
