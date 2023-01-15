@@ -58,6 +58,5 @@ public class Container {
     @resultBuilder public struct ContainerBuilder {
         public static func buildBlock(_ modules: Module...) -> [Module] { modules }
         public static func buildBlock(_ module: Module) -> Module { module }
-        public static func buildEither(first module: Module) -> Module { module }
     }
 }
