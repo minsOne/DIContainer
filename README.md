@@ -51,7 +51,7 @@ cat.doSomething() // prints "Meow.."
 Where definitions of the protocols and struct are
 
 ```swift
-struct AnimalKey: InjectionKey {
+class AnimalKey: InjectionKey {
     var type: Meow?
 }
 

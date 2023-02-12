@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol InjectionKey {
+public protocol InjectionKey: AnyObject {
     associatedtype Value
     var type: Value? { get }
     static var value: Value { get }

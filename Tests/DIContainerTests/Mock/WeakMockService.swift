@@ -1,7 +1,7 @@
 import DIContainer
 import Foundation
 
-struct WeakMockServiceKey: InjectionKey {
+class WeakMockServiceKey: InjectionKey {
     var type: WeakMockService?
 }
 

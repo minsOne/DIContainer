@@ -1,7 +1,7 @@
 import DIContainer
 import Foundation
 
-struct MockServiceKey: InjectionKey {
+class MockServiceKey: InjectionKey {
     var type: MockService?
 }
 
