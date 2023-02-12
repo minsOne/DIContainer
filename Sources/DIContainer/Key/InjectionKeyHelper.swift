@@ -3,6 +3,8 @@ import Foundation
 
 struct InjectionKeyHelper {
     static var classList: [AnyClass] {
+        let start = Date()
+        defer { print("Duration : \( (Date().timeIntervalSince(start) * 1000).rounded() )ms") }
         let numberOfClasses = Int(objc_getClassList(nil, 0))
         guard numberOfClasses > 0 else { return [] }
         
