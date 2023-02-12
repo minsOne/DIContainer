@@ -9,11 +9,15 @@ protocol MockService {
     func doSomething()
 }
 
-class MockServiceImpl: MockService {
+class MockServiceImpl: MockService, AutoRegisterModuleProtocol {
+    typealias ModuleKey = MockServiceKey
+    var key: ModuleKey?
     var count = 0
 
+    required init() {}
+
     func doSomething() {
-        print("Doing something...")
         count += 1
+        print("\(Self.self) doing something... count : \(count)")
     }
 }
