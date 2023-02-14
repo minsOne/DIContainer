@@ -27,7 +27,7 @@ final class WeakInjectTests: XCTestCase {
         @WeakInject(WeakMockServiceKey.self) var service;
         XCTAssertNotNil(service)
     }
-    
+
     func test_WeakInject_동작확인_1() {
         @WeakInject(WeakMockServiceKey.self)
         var service: WeakMockService?

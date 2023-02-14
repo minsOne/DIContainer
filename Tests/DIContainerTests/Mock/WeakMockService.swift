@@ -1,7 +1,9 @@
 import DIContainer
 import Foundation
 
-class WeakMockServiceKey: InjectionKey {
+class WeakMockServiceKey: ScanInjectionKey,
+    InjectionKey
+{
     var type: WeakMockService?
 }
 
@@ -9,13 +11,14 @@ protocol WeakMockService {
     func doSomething()
 }
 
-class WeakMockServiceImpl: WeakMockService, AutoRegisterModuleProtocol {
+class WeakMockServiceImpl: ScanModule,
+    ScanModuleProtocol,
+    WeakMockService
+{
     typealias ModuleKey = WeakMockServiceKey
     var key: ModuleKey?
 
     var count = 0
-
-    required init() {}
 
     func doSomething() {
         count += 1

@@ -2,7 +2,7 @@ import Foundation
 
 @propertyWrapper
 public class Inject<Value> {
-    private let lazyValue: (() -> Value)
+    private let lazyValue: () -> Value
     private var storage: Value?
 
     public var wrappedValue: Value {
@@ -13,7 +13,7 @@ public class Inject<Value> {
         }()
     }
 
-    public init<K>(_ key: K.Type) where K : InjectionKey, Value == K.Value {
+    public init<K>(_ key: K.Type) where K: InjectionKey, Value == K.Value {
         lazyValue = {
             key.value
         }

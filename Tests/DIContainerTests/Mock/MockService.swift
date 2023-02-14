@@ -1,7 +1,9 @@
 import DIContainer
 import Foundation
 
-class MockServiceKey: InjectionKey {
+class MockServiceKey: ScanInjectionKey,
+    InjectionKey
+{
     var type: MockService?
 }
 
@@ -9,12 +11,13 @@ protocol MockService {
     func doSomething()
 }
 
-class MockServiceImpl: MockService, AutoRegisterModuleProtocol {
+class MockServiceImpl: ScanModule,
+    ScanModuleProtocol,
+    MockService
+{
     typealias ModuleKey = MockServiceKey
     var key: ModuleKey?
     var count = 0
-
-    required init() {}
 
     func doSomething() {
         count += 1
