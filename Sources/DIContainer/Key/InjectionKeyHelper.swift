@@ -54,12 +54,12 @@ struct InjectionKeyHelper {
 
         let (firstIndex, lastIndex) = (0, numberOfClasses)
         var (keys, ptrIndex) = ([any InjectionKey.Type](), [Int]())
-        let autoRegisterKeyType = String(cString: class_getName(ScanInjectionKey.self))
+        let scanInjectionKeyType = String(cString: class_getName(ScanInjectionKey.self))
 
         for i in firstIndex ..< lastIndex {
             let cls: AnyClass = classesPtr[i]
             if let superCls = class_getSuperclass(cls),
-               String(cString: class_getName(superCls)) == autoRegisterKeyType,
+               String(cString: class_getName(superCls)) == scanInjectionKeyType,
                case let cls as any InjectionKey.Type = cls
             {
                 ptrIndex.append(i)
@@ -86,27 +86,25 @@ struct InjectionKeyHelper {
 #endif
         return keys
     }
-
-    static var autoRegisterModuleList: [any ScanModuleProtocol.Type] {
+#if DEBUG
+    static var scanModuleTypeList: [any ScanModuleProtocol.Type] {
         guard let (classesPtr, numberOfClasses) = classPtrInfo else { return [] }
         defer { classesPtr.deallocate() }
 
-#if DEBUG
         let start = Date()
         defer {
             print("\(Self.self) \(#function)", "Duration : ", (Date().timeIntervalSince(start) * 1000).rounded(), "ms", "numberOfClasses : \(numberOfClasses)")
         }
-#endif
         
         let (firstIndex, lastIndex) = (0, numberOfClasses)
         var (keys, ptrIndex) = ([any ScanModuleProtocol.Type](), [Int]())
 
-        let autoRegisterModuleType = String(cString: class_getName(ScanModule.self))
+        let scanModuleType = String(cString: class_getName(ScanModule.self))
 
         for i in firstIndex ..< lastIndex {
             let cls: AnyClass = classesPtr[i]
             if let superCls = class_getSuperclass(cls),
-               String(cString: class_getName(superCls)) == autoRegisterModuleType,
+               String(cString: class_getName(superCls)) == scanModuleType,
                case let cls as any ScanModuleProtocol.Type = cls
             {
                 ptrIndex.append(i)
@@ -115,14 +113,24 @@ struct InjectionKeyHelper {
         }
 
 //        for i in (firstIndex ..< lastIndex) {
-//            if case let cls as any AutoRegisterModuleProtocol.Type = classesPtr[i] {
+//            if case let cls as any ScanModuleProtocol.Type = classesPtr[i] {
 //                ptrIndex.append(i)
 //                keys.append(cls)
 //            }
 //        }
-#if DEBUG
+
         print("InjectionKey classPtr Index : \(ptrIndex)")
-#endif
         return keys
     }
+
+    static var scanModuleList: [Module] {
+        scanModuleTypeList
+            .compactMap {
+                ($0 as? ScanModule.Type)
+                    .map { $0.init() }
+                    .flatMap { $0 as? any ScanModuleProtocol & ScanModule }
+                    .map { $0.module }
+            }
+    }
+#endif
 }
