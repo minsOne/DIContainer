@@ -2,7 +2,7 @@ import DIContainer
 import Foundation
 
 class MockServiceKey: ScanInjectionKey,
-    InjectionKey
+                      InjectionKey
 {
     var type: MockService?
 }
@@ -11,9 +11,9 @@ protocol MockService {
     func doSomething()
 }
 
-class MockServiceImpl: ScanModule,
-    ScanModuleProtocol,
-    MockService
+class MockServiceImpl: InjectModule,
+                       InjectModuleProtocol,
+                       MockService
 {
     typealias ModuleKey = MockServiceKey
     var key: ModuleKey?

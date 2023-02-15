@@ -1,7 +1,8 @@
 import Foundation
 
-struct InjectionKeyHelper {
-    static var classPtrInfo: (classesPtr: UnsafeMutablePointer<AnyClass>, numberOfClasses: Int)? {
+public struct ModuleScanner {
+    init() {}
+    var classPtrInfo: (classesPtr: UnsafeMutablePointer<AnyClass>, numberOfClasses: Int)? {
         let numberOfClasses = Int(objc_getClassList(nil, 0))
         guard numberOfClasses > 0 else { return nil }
 
@@ -13,7 +14,7 @@ struct InjectionKeyHelper {
         return (classesPtr, numberOfClasses)
     }
 
-    static var classList: [AnyClass] {
+    var classList: [AnyClass] {
         guard let (classesPtr, numberOfClasses) = classPtrInfo else { return [] }
         defer { classesPtr.deallocate() }
 
@@ -27,7 +28,7 @@ struct InjectionKeyHelper {
         return (0 ..< numberOfClasses).map { classesPtr[$0] }
     }
 
-    public static func classes<T>() -> [T.Type] {
+    public func classes<T>() -> [T.Type] {
         guard let (classesPtr, numberOfClasses) = classPtrInfo else { return [] }
         defer { classesPtr.deallocate() }
 
@@ -41,7 +42,7 @@ struct InjectionKeyHelper {
         return (0 ..< numberOfClasses).compactMap { classesPtr[$0] as? T.Type }
     }
 
-    static var keyList: [any InjectionKey.Type] {
+    var keyList: [any InjectionKey.Type] {
         guard let (classesPtr, numberOfClasses) = classPtrInfo else { return [] }
         defer { classesPtr.deallocate() }
 
@@ -54,12 +55,12 @@ struct InjectionKeyHelper {
 
         let (firstIndex, lastIndex) = (0, numberOfClasses)
         var (keys, ptrIndex) = ([any InjectionKey.Type](), [Int]())
-        let scanInjectionKeyType = String(cString: class_getName(ScanInjectionKey.self))
+        let scanInjectionKeyType = class_getName(ScanInjectionKey.self)
 
         for i in firstIndex ..< lastIndex {
             let cls: AnyClass = classesPtr[i]
             if let superCls = class_getSuperclass(cls),
-               String(cString: class_getName(superCls)) == scanInjectionKeyType,
+               class_getName(superCls) == scanInjectionKeyType,
                case let cls as any InjectionKey.Type = cls
             {
                 ptrIndex.append(i)
@@ -86,8 +87,9 @@ struct InjectionKeyHelper {
 #endif
         return keys
     }
+
 #if DEBUG
-    static var scanModuleTypeList: [any ScanModuleProtocol.Type] {
+    var scanModuleTypeList: [any InjectModuleProtocol.Type] {
         guard let (classesPtr, numberOfClasses) = classPtrInfo else { return [] }
         defer { classesPtr.deallocate() }
 
@@ -97,15 +99,15 @@ struct InjectionKeyHelper {
         }
         
         let (firstIndex, lastIndex) = (0, numberOfClasses)
-        var (keys, ptrIndex) = ([any ScanModuleProtocol.Type](), [Int]())
+        var (keys, ptrIndex) = ([any InjectModuleProtocol.Type](), [Int]())
 
-        let scanModuleType = String(cString: class_getName(ScanModule.self))
+        let scanModuleType = class_getName(InjectModule.self)
 
         for i in firstIndex ..< lastIndex {
             let cls: AnyClass = classesPtr[i]
             if let superCls = class_getSuperclass(cls),
-               String(cString: class_getName(superCls)) == scanModuleType,
-               case let cls as any ScanModuleProtocol.Type = cls
+               class_getName(superCls) == scanModuleType,
+               case let cls as any InjectModuleProtocol.Type = cls
             {
                 ptrIndex.append(i)
                 keys.append(cls)
@@ -113,7 +115,7 @@ struct InjectionKeyHelper {
         }
 
 //        for i in (firstIndex ..< lastIndex) {
-//            if case let cls as any ScanModuleProtocol.Type = classesPtr[i] {
+//            if case let cls as any InjectModuleProtocol.Type = classesPtr[i] {
 //                ptrIndex.append(i)
 //                keys.append(cls)
 //            }
@@ -123,13 +125,12 @@ struct InjectionKeyHelper {
         return keys
     }
 
-    static var scanModuleList: [Module] {
+    var scanModuleList: [Module] {
         scanModuleTypeList
             .compactMap {
-                ($0 as? ScanModule.Type)
-                    .map { $0.init() }
-                    .flatMap { $0 as? any ScanModuleProtocol & ScanModule }
-                    .map { $0.module }
+                ($0 as? InjectModule.Type)
+                    .flatMap { $0.init() as? any InjectModuleProtocol & InjectModule }
+                    .map(\.module)
             }
     }
 #endif

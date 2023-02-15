@@ -1,16 +1,16 @@
 import Foundation
 
-open class ScanModule {
+open class InjectModule {
     public required init() {}
 }
 
-public protocol ScanModuleProtocol: AnyObject {
+public protocol InjectModuleProtocol: AnyObject {
     associatedtype ModuleKey: InjectionKey
     var key: ModuleKey? { get }
 }
 
 #if DEBUG
-public extension ScanModuleProtocol where Self: ScanModule {
+public extension InjectModuleProtocol where Self: InjectModule {
     var module: Module {
         return Module(ModuleKey.self) { self as! Self.ModuleKey.Value }
     }

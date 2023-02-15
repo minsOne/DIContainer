@@ -66,6 +66,13 @@ struct Cat: Meow {
 }
 ```
 
+## Test
+
+```shell
+$ swift test
+$ swift test -Xswiftc -O
+```
+
 ## Post
 
 *  [[Swift 5.7+] Dependency Injection (1) - PropertyWrapper를 이용한 Service Locator 구현하기](https://minsone.github.io/ios-dicontainer-1-property-wrapper)

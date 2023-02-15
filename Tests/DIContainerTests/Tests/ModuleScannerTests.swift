@@ -1,21 +1,22 @@
 import Foundation
+import MockData
 import XCTest
 
 @testable import DIContainer
 
-final class SearchInjectionKeyTests: XCTestCase {
+final class ModuleScannerTests: XCTestCase {
     override func setUp() {
         super.setUp()
     }
 
-    func test_SearchInjectKey() {
+    func test_ScanInjectKeys() {
         Container {
             Module(MockServiceKey.self) { MockServiceImpl() }
             Module(WeakMockServiceKey.self) { WeakMockServiceImpl() }
         }
         .build()
 
-        let keyList = InjectionKeyHelper.keyList
+        let keyList = ModuleScanner().keyList
 
         print("\nInjectionKey는 \(keyList.count)개 있습니다")
         print("다음은 InjectionKey 목록입니다.\n\(keyList)\n")
@@ -31,8 +32,8 @@ final class SearchInjectionKeyTests: XCTestCase {
         }
     }
 
-    func test_AutoRegisterModule() {
-        let moduleList = InjectionKeyHelper.scanModuleList
+    func test_ScanModules() {
+        let moduleList = ModuleScanner().scanModuleList
 
         print("\nModule는 \(moduleList.count)개 있습니다.")
         print("다음은 Module 목록입니다.\n\(moduleList)\n")
