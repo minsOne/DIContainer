@@ -1,24 +1,23 @@
 import DIContainer
 import Foundation
 
-class MockServiceKey: ScanInjectionKey,
-                      InjectionKey
+class MockServiceKey: InjectionKey
 {
-    var type: MockService?
+    var injectKey: MockService?
 }
 
 protocol MockService {
     func doSomething()
 }
 
-class MockServiceImpl: InjectModule,
-                       InjectModuleProtocol,
+class MockServiceImpl: InjectionModulable,
                        MockService
 {
-    typealias ModuleKey = MockServiceKey
-    var key: ModuleKey?
+    var injectKey: MockServiceKey?
     var count = 0
 
+    required init() {}
+    
     func doSomething() {
         count += 1
         print("\(Self.self) doing something... count : \(count)")

@@ -46,28 +46,23 @@ public struct ModuleScanner {
         guard let (classesPtr, numberOfClasses) = classPtrInfo else { return [] }
         defer { classesPtr.deallocate() }
 
-#if DEBUG
         let start = Date()
-        defer {
-            print("\(Self.self) \(#function)", "Duration : ", (Date().timeIntervalSince(start) * 1000).rounded(), "ms", "numberOfClasses : \(numberOfClasses)")
-        }
-#endif
-
         let (firstIndex, lastIndex) = (0, numberOfClasses)
         var (keys, ptrIndex) = ([any InjectionKey.Type](), [Int]())
-        let scanInjectionKeyType = class_getName(ScanInjectionKey.self)
+        let scanKey = InjectionKeyScannerKey
 
+// MARK: - Case 1
         for i in firstIndex ..< lastIndex {
             let cls: AnyClass = classesPtr[i]
-            if let superCls = class_getSuperclass(cls),
-               class_getName(superCls) == scanInjectionKeyType,
-               case let cls as any InjectionKey.Type = cls
+            if let _ = class_getInstanceVariable(cls, scanKey),
+               case let kcls as any InjectionKey.Type = cls
             {
                 ptrIndex.append(i)
-                keys.append(cls)
+                keys.append(kcls)
             }
         }
 
+// MARK: - Case 2
 //        for i in (firstIndex ..< lastIndex) where String(cString: class_getName(classesPtr[i])).lowercased().contains("key") {
 //            if case let cls as any InjectionKey.Type = classesPtr[i] {
 //                ptrIndex.append(i)
@@ -75,6 +70,7 @@ public struct ModuleScanner {
 //            }
 //        }
 
+// MARK: - Case 3
 //        for i in (firstIndex ..< lastIndex) {
 //            if case let cls as any InjectionKey.Type = classesPtr[i] {
 //                ptrIndex.append(i)
@@ -82,56 +78,62 @@ public struct ModuleScanner {
 //            }
 //        }
 
+
 #if DEBUG
-        print("InjectionKey classPtr Index : \(ptrIndex)")
+        print("\n┌─────\(Self.self) \(#function)─────────────────────")
+        print("│Duration : ", (Date().timeIntervalSince(start) * 1000).rounded(), "ms")
+        print("│numberOfClasses : \(numberOfClasses)")
+        print("│InjectionKey classPtr Index : \(ptrIndex)")
+        print("│InjectionModulable List :")
+        print("│ - \(keys)")
+        print("└────────────────────────────────────────────────\n")
 #endif
         return keys
     }
 
-#if DEBUG
-    var scanModuleTypeList: [any InjectModuleProtocol.Type] {
+    var scanModuleTypeList: [any InjectionModulable.Type] {
         guard let (classesPtr, numberOfClasses) = classPtrInfo else { return [] }
         defer { classesPtr.deallocate() }
 
         let start = Date()
-        defer {
-            print("\(Self.self) \(#function)", "Duration : ", (Date().timeIntervalSince(start) * 1000).rounded(), "ms", "numberOfClasses : \(numberOfClasses)")
-        }
-        
         let (firstIndex, lastIndex) = (0, numberOfClasses)
-        var (keys, ptrIndex) = ([any InjectModuleProtocol.Type](), [Int]())
+        var (keys, ptrIndex) = ([any InjectionModulable.Type](), [Int]())
+        let scanKey = InjectionKeyScannerKey
 
-        let scanModuleType = class_getName(InjectModule.self)
-
+// MARK: - Case 1
         for i in firstIndex ..< lastIndex {
             let cls: AnyClass = classesPtr[i]
-            if let superCls = class_getSuperclass(cls),
-               class_getName(superCls) == scanModuleType,
-               case let cls as any InjectModuleProtocol.Type = cls
-            {
+            if let _ = class_getInstanceVariable(cls, scanKey),
+               case let kcls as any InjectionModulable.Type = cls {
                 ptrIndex.append(i)
-                keys.append(cls)
+                keys.append(kcls)
             }
         }
 
+// MARK: - Case 2
 //        for i in (firstIndex ..< lastIndex) {
-//            if case let cls as any InjectModuleProtocol.Type = classesPtr[i] {
+//            if case let cls as any InjectionModulable.Type = classesPtr[i] {
 //                ptrIndex.append(i)
 //                keys.append(cls)
 //            }
 //        }
 
-        print("InjectionKey classPtr Index : \(ptrIndex)")
+
+#if DEBUG
+        print("\n┌─────\(Self.self) \(#function)─────────────────────")
+        print("│Duration : ", (Date().timeIntervalSince(start) * 1000).rounded(), "ms")
+        print("│numberOfClasses : \(numberOfClasses)")
+        print("│InjectionKey classPtr Index List : \(ptrIndex)")
+        print("│InjectionModulable List :")
+        print("│ - \(keys)")
+        print("└────────────────────────────────────────────────\n")
+#endif
+        
         return keys
     }
 
     var scanModuleList: [Module] {
         scanModuleTypeList
-            .compactMap {
-                ($0 as? InjectModule.Type)
-                    .flatMap { $0.init() as? any InjectModuleProtocol & InjectModule }
-                    .map(\.module)
-            }
+            .compactMap { $0.module }
     }
-#endif
 }

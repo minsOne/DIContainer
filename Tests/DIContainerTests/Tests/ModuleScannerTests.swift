@@ -18,10 +18,13 @@ final class ModuleScannerTests: XCTestCase {
 
         let keyList = ModuleScanner().keyList
 
-        print("\nInjectionKey는 \(keyList.count)개 있습니다")
-        print("다음은 InjectionKey 목록입니다.\n\(keyList)\n")
-
-        XCTAssert(keyList.count == 2)
+        print("\n┌─────\(Self.self) \(#function)─────────────────────")
+        print("│InjectionKey는 \(keyList.count)개 있습니다")
+        print("│다음은 InjectionKey 목록입니다.")
+        print("│ - \(keyList)")
+        print("└────────────────────────────────────────────────\n")
+        XCTAssertEqual(keyList.isEmpty, false)
+        XCTAssertEqual(keyList.count, 2)
 
         for key in keyList {
             let obj: any Any = Container.resolve(for: key)
@@ -35,10 +38,14 @@ final class ModuleScannerTests: XCTestCase {
     func test_ScanModules() {
         let moduleList = ModuleScanner().scanModuleList
 
-        print("\nModule는 \(moduleList.count)개 있습니다.")
-        print("다음은 Module 목록입니다.\n\(moduleList)\n")
+        print("\n┌─────\(Self.self) \(#function)─────────────────────")
+        print("│Module는 \(moduleList.count)개 있습니다.")
+        print("│다음은 Module 목록입니다.")
+        print("│ - \(moduleList)")
+        print("└────────────────────────────────────────────────\n")
 
-        XCTAssert(moduleList.count == 2)
+        XCTAssertEqual(moduleList.isEmpty, false)
+        XCTAssertEqual(moduleList.count, 2)
 
         Container(modules: moduleList)
             .build()
@@ -47,6 +54,7 @@ final class ModuleScannerTests: XCTestCase {
             @Inject(MockServiceKey.self) var service;
             service.doSomething()
         }
+
         do {
             @WeakInject(WeakMockServiceKey.self) var service;
             service?.doSomething()

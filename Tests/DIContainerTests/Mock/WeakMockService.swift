@@ -1,24 +1,23 @@
 import DIContainer
 import Foundation
 
-class WeakMockServiceKey: ScanInjectionKey,
-                          InjectionKey
+class WeakMockServiceKey: InjectionKey
 {
-    var type: WeakMockService?
+    var injectKey: WeakMockService?
 }
 
 protocol WeakMockService {
     func doSomething()
 }
 
-class WeakMockServiceImpl: InjectModule,
-                           InjectModuleProtocol,
+class WeakMockServiceImpl: InjectionModulable,
                            WeakMockService
 {
-    typealias ModuleKey = WeakMockServiceKey
-    var key: ModuleKey?
+    var injectKey: WeakMockServiceKey?
 
     var count = 0
+    
+    required init() {}
 
     func doSomething() {
         count += 1

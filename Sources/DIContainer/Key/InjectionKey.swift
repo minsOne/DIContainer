@@ -2,7 +2,7 @@ import Foundation
 
 public protocol InjectionKey: AnyObject {
     associatedtype Value
-    var type: Value? { get }
+    var injectKey: Value? { get }
     static var value: Value { get }
     static var weakValue: Value? { get }
 }
@@ -16,3 +16,5 @@ public extension InjectionKey {
         Container.weakResolve(for: Self.self)
     }
 }
+
+public let InjectionKeyScannerKey = "injectKey"
