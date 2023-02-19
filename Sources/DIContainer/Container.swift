@@ -33,12 +33,17 @@ public class Container {
 
     /// Registers a specific type and its instantiating factory.
     public func add(module: Module) -> Self {
-        modules[module.name] = module
-        return self
+        return append(contentsOf: [module])
     }
 
     public func append(contentsOf newElements: [Module]) -> Self {
-        newElements.forEach { modules[$0.name] = $0 }
+        newElements.forEach { module in
+            let key = module.name
+            if let _ = modules[key] {
+                assertionFailure("\(key) Key is existed. Please check module \(module)")
+            }
+            modules[key] = module
+        }
         return self
     }
 
@@ -57,7 +62,7 @@ public class Container {
     /// Construct dependency resolution.
     public convenience init(@ContainerBuilder _ module: () -> Module) {
         self.init()
-        _ = add(module: module())
+        _ = append(contentsOf: [module()])
     }
 
     /// Assigns the current container to the composition root.
