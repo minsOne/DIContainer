@@ -69,6 +69,7 @@ struct Cat: Meow {
 ## Test
 
 ```shell
+$ (cd MockData/Sources/MockData && for i in {1..20}; do cp MockClass.swift MockClass$i.swift; done)
 $ swift test
 $ swift test -Xswiftc -O
 ```
