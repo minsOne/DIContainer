@@ -63,7 +63,7 @@ public struct ModuleScanner {
         }
 
 // MARK: - Case 2
-//        for i in (firstIndex ..< lastIndex) where String(cString: class_getName(classesPtr[i])).lowercased().contains("key") {
+//        for i in firstIndex ..< lastIndex where String(cString: class_getName(classesPtr[i])).lowercased().contains("key") {
 //            if case let cls as any InjectionKey.Type = classesPtr[i] {
 //                ptrIndex.append(i)
 //                keys.append(cls)
@@ -71,7 +71,7 @@ public struct ModuleScanner {
 //        }
 
 // MARK: - Case 3
-//        for i in (firstIndex ..< lastIndex) {
+//        for i in firstIndex ..< lastIndex {
 //            if case let cls as any InjectionKey.Type = classesPtr[i] {
 //                ptrIndex.append(i)
 //                keys.append(cls)
@@ -134,6 +134,6 @@ public struct ModuleScanner {
 
     var scanModuleList: [Module] {
         scanModuleTypeList
-            .compactMap { $0.module }
+            .compactMap { $0.init().module }
     }
 }

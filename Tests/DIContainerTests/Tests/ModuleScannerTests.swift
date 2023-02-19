@@ -21,8 +21,9 @@ final class ModuleScannerTests: XCTestCase {
         print("\n┌─────\(Self.self) \(#function)─────────────────────")
         print("│InjectionKey는 \(keyList.count)개 있습니다")
         print("│다음은 InjectionKey 목록입니다.")
-        print("│ - \(keyList)")
+        print("\(dump(keyList))")
         print("└────────────────────────────────────────────────\n")
+
         XCTAssertEqual(keyList.isEmpty, false)
         XCTAssertEqual(keyList.count, 2)
 
@@ -41,7 +42,7 @@ final class ModuleScannerTests: XCTestCase {
         print("\n┌─────\(Self.self) \(#function)─────────────────────")
         print("│Module는 \(moduleList.count)개 있습니다.")
         print("│다음은 Module 목록입니다.")
-        print("│ - \(moduleList)")
+        print("\(dump(moduleList))")
         print("└────────────────────────────────────────────────\n")
 
         XCTAssertEqual(moduleList.isEmpty, false)

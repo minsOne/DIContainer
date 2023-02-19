@@ -10,8 +10,8 @@ protocol WeakMockService {
     func doSomething()
 }
 
-class WeakMockServiceImpl: InjectionModulable,
-                           WeakMockService
+class WeakMockServiceImpl: WeakMockService,
+                           InjectionModulable
 {
     var injectKey: WeakMockServiceKey?
 

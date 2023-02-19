@@ -11,9 +11,7 @@ public class Container {
     ///
     /// If the dependency is not found, an exception will occur.
     static func resolve<T>(for type: Any.Type?) -> T {
-        let name = type.map { String(describing: $0) } ?? String(describing: T.self)
-
-        guard let component: T = root.modules[name]?.resolve() as? T else {
+        guard let component: T = weakResolve(for: type) else {
             fatalError("Dependency '\(T.self)' not resolved!")
         }
 

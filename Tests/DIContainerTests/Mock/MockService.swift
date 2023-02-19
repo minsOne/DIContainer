@@ -10,8 +10,8 @@ protocol MockService {
     func doSomething()
 }
 
-class MockServiceImpl: InjectionModulable,
-                       MockService
+class MockServiceImpl: MockService,
+                       InjectionModulable
 {
     var injectKey: MockServiceKey?
     var count = 0

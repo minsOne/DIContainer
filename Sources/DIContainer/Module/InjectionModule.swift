@@ -7,9 +7,9 @@ public protocol InjectionModulable: AnyObject {
 }
 
 public extension InjectionModulable {
-    static var module: Module? {
+    var module: Module? {
         guard
-            let instance = Self.init() as? Self.ModuleKeyType.Value
+            let instance = self as? ModuleKeyType.Value
         else { return nil }
 
         return Module(ModuleKeyType.self) { instance }
