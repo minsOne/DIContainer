@@ -1,9 +1,12 @@
 import Foundation
 
+open class InjectionModuleScanType {
+    required public init() {}
+}
+
 public protocol InjectionModulable: AnyObject {
     associatedtype ModuleKeyType: InjectionKey
     var injectKey: ModuleKeyType? { get }
-    init()
 }
 
 public extension InjectionModulable {
@@ -15,3 +18,5 @@ public extension InjectionModulable {
         return Module(ModuleKeyType.self) { instance }
     }
 }
+
+public typealias InjectionModule = InjectionModuleScanType & InjectionModulable

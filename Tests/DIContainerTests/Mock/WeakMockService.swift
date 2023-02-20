@@ -1,7 +1,7 @@
 import DIContainer
 import Foundation
 
-class WeakMockServiceKey: InjectionKey
+class WeakMockServiceKey: InjectionKeyType
 {
     var injectKey: WeakMockService?
 }
@@ -10,8 +10,7 @@ protocol WeakMockService {
     func doSomething()
 }
 
-class WeakMockServiceImpl: WeakMockService,
-                           InjectionModulable
+class WeakMockServiceImpl: InjectionModule, WeakMockService
 {
     var injectKey: WeakMockServiceKey?
 

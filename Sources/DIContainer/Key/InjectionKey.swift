@@ -1,5 +1,10 @@
 import Foundation
 
+/// 직접 사용하지 말것
+open class InjectionKeyScanType {
+    public init() {}
+}
+
 public protocol InjectionKey: AnyObject {
     associatedtype Value
     var injectKey: Value? { get }
@@ -17,4 +22,4 @@ public extension InjectionKey {
     }
 }
 
-public let InjectionKeyScannerKey = "injectKey"
+public typealias InjectionKeyType = InjectionKeyScanType & InjectionKey

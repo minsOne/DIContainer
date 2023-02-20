@@ -49,12 +49,12 @@ public struct ModuleScanner {
         let start = Date()
         let (firstIndex, lastIndex) = (0, numberOfClasses)
         var (keys, ptrIndex) = ([any InjectionKey.Type](), [Int]())
-        let scanKey = InjectionKeyScannerKey
+        let superCls = InjectionKeyScanType.self
 
 // MARK: - Case 1
         for i in firstIndex ..< lastIndex {
             let cls: AnyClass = classesPtr[i]
-            if let _ = class_getInstanceVariable(cls, scanKey),
+            if class_getSuperclass(cls) == superCls,
                case let kcls as any InjectionKey.Type = cls
             {
                 ptrIndex.append(i)
@@ -98,12 +98,12 @@ public struct ModuleScanner {
         let start = Date()
         let (firstIndex, lastIndex) = (0, numberOfClasses)
         var (keys, ptrIndex) = ([any InjectionModulable.Type](), [Int]())
-        let scanKey = InjectionKeyScannerKey
+        let superCls = InjectionModuleType.self
 
 // MARK: - Case 1
         for i in firstIndex ..< lastIndex {
             let cls: AnyClass = classesPtr[i]
-            if let _ = class_getInstanceVariable(cls, scanKey),
+            if class_getSuperclass(cls) == superCls,
                case let kcls as any InjectionModulable.Type = cls {
                 ptrIndex.append(i)
                 keys.append(kcls)
@@ -133,7 +133,7 @@ public struct ModuleScanner {
     }
 
     var scanModuleList: [Module] {
-        scanModuleTypeList
-            .compactMap { $0.init().module }
+        return scanModuleTypeList
+            .compactMap { ($0 as? any (InjectionModuleType & InjectionModulable).Type)?.init().module }
     }
 }

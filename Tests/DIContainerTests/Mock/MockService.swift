@@ -1,7 +1,7 @@
 import DIContainer
 import Foundation
 
-class MockServiceKey: InjectionKey
+class MockServiceKey: InjectionKeyType
 {
     var injectKey: MockService?
 }
@@ -10,13 +10,10 @@ protocol MockService {
     func doSomething()
 }
 
-class MockServiceImpl: MockService,
-                       InjectionModulable
+class MockServiceImpl: InjectionModule, MockService
 {
     var injectKey: MockServiceKey?
     var count = 0
-
-    required init() {}
     
     func doSomething() {
         count += 1
