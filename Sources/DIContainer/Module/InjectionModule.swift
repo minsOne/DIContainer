@@ -1,7 +1,7 @@
 import Foundation
 
 open class InjectionModuleScanType {
-    required public init() {}
+    public required init() {}
 }
 
 public protocol InjectionModulable: AnyObject {

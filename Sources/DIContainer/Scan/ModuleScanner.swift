@@ -55,8 +55,7 @@ public struct ModuleScanner {
         for i in firstIndex ..< lastIndex {
             let cls: AnyClass = classesPtr[i]
             if class_getSuperclass(cls) == superCls,
-               case let kcls as any InjectionKey.Type = cls
-            {
+               case let kcls as any InjectionKey.Type = cls {
                 ptrIndex.append(i)
                 keys.append(kcls)
             }
@@ -67,8 +66,7 @@ public struct ModuleScanner {
 //        for i in firstIndex ..< lastIndex {
 //            let cls: AnyClass = classesPtr[i]
 //            if let _ = class_getInstanceVariable(cls, key),
-//               case let kcls as any InjectionKey.Type = cls
-//            {
+//               case let kcls as any InjectionKey.Type = cls {
 //                ptrIndex.append(i)
 //                keys.append(kcls)
 //            }
@@ -151,12 +149,12 @@ public struct ModuleScanner {
         print("│ - \(keys)")
         print("└────────────────────────────────────────────────\n")
 #endif
-        
+
         return keys
     }
 
     var scanModuleList: [Module] {
-        return scanModuleTypeList
+        scanModuleTypeList
             .compactMap { ($0 as? any InjectionModule.Type)?.init().module }
     }
 }

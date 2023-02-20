@@ -1,12 +1,34 @@
 import Foundation
 
 public class Container {
+    static var root = Container()
+
     /// Stored object instance factories.
     var modules: [String: Module] = [:]
 
     public init() {}
     deinit { modules.removeAll() }
+}
 
+public extension Container {
+    /// Registers a specific type and its instantiating factory.
+    func add(module: Module) -> Self {
+        append(contentsOf: [module])
+    }
+
+    func append(contentsOf newElements: [Module]) -> Self {
+        newElements.forEach { module in
+            let key = module.name
+            if let _ = modules[key] {
+                assertionFailure("\(key) Key is existed. Please check module \(module)")
+            }
+            modules[key] = module
+        }
+        return self
+    }
+}
+
+extension Container {
     /// Resolves through inference and returns an instance of the given type from the current default container.
     ///
     /// If the dependency is not found, an exception will occur.
@@ -26,52 +48,36 @@ public class Container {
 
         return root.modules[name]?.resolve() as? T
     }
+}
 
-    static var root = Container()
-
-    /// Registers a specific type and its instantiating factory.
-    public func add(module: Module) -> Self {
-        return append(contentsOf: [module])
-    }
-
-    public func append(contentsOf newElements: [Module]) -> Self {
-        newElements.forEach { module in
-            let key = module.name
-            if let _ = modules[key] {
-                assertionFailure("\(key) Key is existed. Please check module \(module)")
-            }
-            modules[key] = module
-        }
-        return self
+public extension Container {
+    /// DSL for declaring modules within the container dependency initializer.
+    @resultBuilder enum ContainerBuilder {
+        public static func buildBlock(_ modules: Module...) -> [Module] { modules }
+        public static func buildBlock(_ module: Module) -> Module { module }
     }
 
     /// Construct dependency resolutions.
-    public convenience init(@ContainerBuilder _ modules: () -> [Module]) {
+    convenience init(@ContainerBuilder _ modules: () -> [Module]) {
         self.init()
         _ = append(contentsOf: modules())
     }
 
     /// Construct dependency resolutions.
-    public convenience init(modules: [Module]) {
+    convenience init(modules: [Module]) {
         self.init()
         _ = append(contentsOf: modules)
     }
 
     /// Construct dependency resolution.
-    public convenience init(@ContainerBuilder _ module: () -> Module) {
+    convenience init(@ContainerBuilder _ module: () -> Module) {
         self.init()
         _ = append(contentsOf: [module()])
     }
 
     /// Assigns the current container to the composition root.
-    public func build() {
+    func build() {
         // Used later in property wrapper
         Self.root = self
-    }
-
-    /// DSL for declaring modules within the container dependency initializer.
-    @resultBuilder public enum ContainerBuilder {
-        public static func buildBlock(_ modules: Module...) -> [Module] { modules }
-        public static func buildBlock(_ module: Module) -> Module { module }
     }
 }
