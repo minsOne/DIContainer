@@ -51,7 +51,7 @@ public struct ModuleScanner {
         var (keys, ptrIndex) = ([any InjectionKey.Type](), [Int]())
         let superCls = InjectionKeyScanType.self
 
-// MARK: - Case 1
+// MARK: Case 1 - class_getSuperclass
         for i in firstIndex ..< lastIndex {
             let cls: AnyClass = classesPtr[i]
             if class_getSuperclass(cls) == superCls,
@@ -62,7 +62,19 @@ public struct ModuleScanner {
             }
         }
 
-// MARK: - Case 2
+// MARK: Case 2 - class_getInstanceVariable
+//        let key = "injectKey"
+//        for i in firstIndex ..< lastIndex {
+//            let cls: AnyClass = classesPtr[i]
+//            if let _ = class_getInstanceVariable(cls, key),
+//               case let kcls as any InjectionKey.Type = cls
+//            {
+//                ptrIndex.append(i)
+//                keys.append(kcls)
+//            }
+//        }
+
+// MARK: Case 3 class_getName
 //        for i in firstIndex ..< lastIndex where String(cString: class_getName(classesPtr[i])).lowercased().contains("key") {
 //            if case let cls as any InjectionKey.Type = classesPtr[i] {
 //                ptrIndex.append(i)
@@ -70,7 +82,7 @@ public struct ModuleScanner {
 //            }
 //        }
 
-// MARK: - Case 3
+// MARK: Case 4 Casting
 //        for i in firstIndex ..< lastIndex {
 //            if case let cls as any InjectionKey.Type = classesPtr[i] {
 //                ptrIndex.append(i)
@@ -98,9 +110,9 @@ public struct ModuleScanner {
         let start = Date()
         let (firstIndex, lastIndex) = (0, numberOfClasses)
         var (keys, ptrIndex) = ([any InjectionModulable.Type](), [Int]())
-        let superCls = InjectionModuleType.self
+        let superCls = InjectionModuleScanType.self
 
-// MARK: - Case 1
+// MARK: Case 1 - class_getSuperclass
         for i in firstIndex ..< lastIndex {
             let cls: AnyClass = classesPtr[i]
             if class_getSuperclass(cls) == superCls,
@@ -110,7 +122,18 @@ public struct ModuleScanner {
             }
         }
 
-// MARK: - Case 2
+// MARK: Case 2 - class_getInstanceVariable
+//        let key = "injectKey"
+//        for i in firstIndex ..< lastIndex {
+//            let cls: AnyClass = classesPtr[i]
+//            if let _ = class_getInstanceVariable(cls, key),
+//               case let kcls as any InjectionModulable.Type = cls {
+//                ptrIndex.append(i)
+//                keys.append(kcls)
+//            }
+//        }
+
+// MARK: Case 3 - Casting
 //        for i in (firstIndex ..< lastIndex) {
 //            if case let cls as any InjectionModulable.Type = classesPtr[i] {
 //                ptrIndex.append(i)
@@ -134,6 +157,6 @@ public struct ModuleScanner {
 
     var scanModuleList: [Module] {
         return scanModuleTypeList
-            .compactMap { ($0 as? any (InjectionModuleType & InjectionModulable).Type)?.init().module }
+            .compactMap { ($0 as? any InjectionModule.Type)?.init().module }
     }
 }
