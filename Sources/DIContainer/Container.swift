@@ -12,18 +12,19 @@ public class Container {
 
 public extension Container {
     /// Registers a specific type and its instantiating factory.
+    @discardableResult
     func add(module: Module) -> Self {
-        append(contentsOf: [module])
+        let key = module.name
+        if let _ = modules[key] {
+            assertionFailure("\(key) Key is existed. Please check module \(module)")
+        }
+        modules[key] = module
+        return self
     }
 
+    @discardableResult
     func append(contentsOf newElements: [Module]) -> Self {
-        newElements.forEach { module in
-            let key = module.name
-            if let _ = modules[key] {
-                assertionFailure("\(key) Key is existed. Please check module \(module)")
-            }
-            modules[key] = module
-        }
+        newElements.forEach { add(module: $0) }
         return self
     }
 }
@@ -60,19 +61,19 @@ public extension Container {
     /// Construct dependency resolutions.
     convenience init(@ContainerBuilder _ modules: () -> [Module]) {
         self.init()
-        _ = append(contentsOf: modules())
+        append(contentsOf: modules())
     }
 
     /// Construct dependency resolutions.
     convenience init(modules: [Module]) {
         self.init()
-        _ = append(contentsOf: modules)
+        append(contentsOf: modules)
     }
 
     /// Construct dependency resolution.
     convenience init(@ContainerBuilder _ module: () -> Module) {
         self.init()
-        _ = append(contentsOf: [module()])
+        append(contentsOf: [module()])
     }
 
     /// Assigns the current container to the composition root.
