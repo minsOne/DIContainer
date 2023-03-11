@@ -5,7 +5,7 @@ public struct Module {
     let name: String
     let resolve: () -> Any
 
-    public init<T: InjectionKey, U>(
+    public init<T: InjectionKeyType, U>(
         _ name: T.Type,
         _ resolve: @escaping () -> U
     ) where T.Value == U {

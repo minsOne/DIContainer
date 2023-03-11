@@ -5,9 +5,10 @@ open class InjectionModuleScanType {
 }
 
 public protocol InjectionModulable: AnyObject {
-    associatedtype ModuleKeyType: InjectionKey
-    var injectKey: ModuleKeyType? { get }
+    associatedtype ModuleKeyType: InjectionKeyType
 }
+
+public typealias InjectionModule = InjectionModuleScanType & InjectionModulable
 
 public extension InjectionModulable {
     var module: Module? {
@@ -19,4 +20,3 @@ public extension InjectionModulable {
     }
 }
 
-public typealias InjectionModule = InjectionModuleScanType & InjectionModulable

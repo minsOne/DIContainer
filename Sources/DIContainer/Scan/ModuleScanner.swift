@@ -1,4 +1,5 @@
 import Foundation
+import ObjectiveC.runtime
 
 public struct ModuleScanner {
     init() {}
@@ -42,20 +43,20 @@ public struct ModuleScanner {
         return (0 ..< numberOfClasses).compactMap { classesPtr[$0] as? T.Type }
     }
 
-    var keyList: [any InjectionKey.Type] {
+    var keyList: [any InjectionKeyType.Type] {
         guard let (classesPtr, numberOfClasses) = classPtrInfo else { return [] }
         defer { classesPtr.deallocate() }
 
         let start = Date()
         let (firstIndex, lastIndex) = (0, numberOfClasses)
-        var (keys, ptrIndex) = ([any InjectionKey.Type](), [Int]())
+        var (keys, ptrIndex) = ([any InjectionKeyType.Type](), [Int]())
         let superCls = InjectionKeyScanType.self
 
 // MARK: Case 1 - class_getSuperclass
         for i in firstIndex ..< lastIndex {
             let cls: AnyClass = classesPtr[i]
             if class_getSuperclass(cls) == superCls,
-               case let kcls as any InjectionKey.Type = cls {
+               case let kcls as any InjectionKeyType.Type = cls {
                 ptrIndex.append(i)
                 keys.append(kcls)
             }

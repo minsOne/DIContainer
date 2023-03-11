@@ -13,7 +13,7 @@ public class Inject<Value> {
         }()
     }
 
-    public init<K>(_ key: K.Type) where K: InjectionKey, Value == K.Value {
+    public init<K>(_ key: K.Type) where K: InjectionKeyType, Value == K.Value {
         lazyValue = {
             key.value
         }

@@ -1,25 +1,24 @@
 import Foundation
 
-/// 직접 사용하지 말것
-open class InjectionKeyScanType {
-    public init() {}
-}
-
-public protocol InjectionKey: AnyObject {
+public protocol InjectionKeyType: AnyObject {
     associatedtype Value
-    var injectKey: Value? { get }
     static var value: Value { get }
     static var weakValue: Value? { get }
 }
 
-public extension InjectionKey {
+public extension InjectionKeyType {
     static var value: Value {
         Container.resolve(for: Self.self)
     }
-
+    
     static var weakValue: Value? {
         Container.weakResolve(for: Self.self)
     }
 }
 
-public typealias InjectionKeyType = InjectionKeyScanType & InjectionKey
+/// 직접 사용하지 말것
+open class InjectionKeyScanType {
+    public init() {}
+}
+
+public typealias InjectionKey = InjectionKeyScanType & InjectionKeyType

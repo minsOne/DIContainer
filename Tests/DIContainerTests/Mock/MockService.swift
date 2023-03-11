@@ -1,18 +1,17 @@
 import DIContainer
 import Foundation
 
-class MockServiceKey: InjectionKeyType
-{
-    var injectKey: MockService?
+class MockServiceKey: InjectionKey {
+    typealias Value = MockService
 }
 
 protocol MockService {
     func doSomething()
 }
 
-class MockServiceImpl: InjectionModule, MockService
-{
-    var injectKey: MockServiceKey?
+class MockServiceImpl: InjectionModule, MockService {
+    typealias ModuleKeyType = MockServiceKey
+
     var count = 0
     
     func doSomething() {
