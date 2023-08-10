@@ -3,7 +3,7 @@ import XCTest
 @testable import DIContainer
 
 final class WeakInjectNilTests: XCTestCase {
-    let mock: WeakMockServiceImpl = .init()
+    let mock = WeakMockServiceImpl()
 
     override func setUp() {
         super.setUp()
@@ -19,7 +19,7 @@ final class WeakInjectNilTests: XCTestCase {
     }
 
     func test_컨테이너_등록여부_확인_2() {
-        @WeakInject(WeakMockServiceKey.self) var service;
+        @WeakInject(WeakMockServiceKey.self) var service
         XCTAssertNil(service)
     }
 
@@ -33,7 +33,7 @@ final class WeakInjectNilTests: XCTestCase {
     }
 
     func test_WeakInject_Nil_동작확인_2() {
-        @WeakInject(WeakMockServiceKey.self) var service;
+        @WeakInject(WeakMockServiceKey.self) var service
         XCTAssertNil(service)
 
         service?.doSomething()

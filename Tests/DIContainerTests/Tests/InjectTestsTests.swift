@@ -3,7 +3,7 @@ import XCTest
 @testable import DIContainer
 
 final class InjectTests: XCTestCase {
-    let mock: MockServiceImpl = .init()
+    let mock = MockServiceImpl()
 
     override func setUp() {
         super.setUp()
@@ -35,7 +35,7 @@ final class InjectTests: XCTestCase {
     }
 
     func test_Inject동작확인_2() {
-        @Inject(MockServiceKey.self) var service;
+        @Inject(MockServiceKey.self) var service
         service.doSomething()
         XCTAssertEqual(mock.count, 1)
     }

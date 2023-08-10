@@ -52,12 +52,12 @@ final class ModuleScannerTests: XCTestCase {
             .build()
 
         do {
-            @Inject(MockServiceKey.self) var service;
+            @Inject(MockServiceKey.self) var service
             service.doSomething()
         }
 
         do {
-            @WeakInject(WeakMockServiceKey.self) var service;
+            @WeakInject(WeakMockServiceKey.self) var service
             service?.doSomething()
         }
     }
