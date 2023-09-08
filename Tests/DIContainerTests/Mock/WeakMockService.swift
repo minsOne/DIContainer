@@ -13,7 +13,7 @@ class WeakMockServiceImpl: InjectionModule, WeakMockService {
     typealias ModuleKeyType = WeakMockServiceKey
 
     var count = 0
-    
+
     required init() {}
 
     func doSomething() {

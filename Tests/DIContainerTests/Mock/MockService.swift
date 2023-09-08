@@ -13,7 +13,7 @@ class MockServiceImpl: InjectionModule, MockService {
     typealias ModuleKeyType = MockServiceKey
 
     var count = 0
-    
+
     func doSomething() {
         count += 1
         print("\(Self.self) doing something... count : \(count)")

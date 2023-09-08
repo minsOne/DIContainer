@@ -3,17 +3,17 @@ import XCTest
 @testable import DIContainer
 
 final class InjectTests: XCTestCase {
-    let mock = MockServiceImpl()
-
     override func setUp() {
         super.setUp()
 
-        let mock = self.mock
-
         Container {
-            Module(MockServiceKey.self) { mock }
+            Module(MockServiceKey.self) { MockServiceImpl() }
         }
         .build()
+    }
+
+    override class func tearDown() {
+        super.tearDown()
     }
 
     func test_컨테이너_등록여부_확인_1() {
@@ -31,12 +31,12 @@ final class InjectTests: XCTestCase {
         var service: MockService
 
         service.doSomething()
-        XCTAssertEqual(mock.count, 1)
+        XCTAssertEqual((service as? MockServiceImpl)?.count, 1)
     }
 
     func test_Inject동작확인_2() {
         @Inject(MockServiceKey.self) var service
         service.doSomething()
-        XCTAssertEqual(mock.count, 1)
+        XCTAssertEqual((service as? MockServiceImpl)?.count, 1)
     }
 }

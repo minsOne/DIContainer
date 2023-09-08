@@ -9,6 +9,10 @@ final class ModuleScannerTests: XCTestCase {
         super.setUp()
     }
 
+    override class func tearDown() {
+        super.tearDown()
+    }
+
     func test_ScanInjectKeys() {
         Container {
             Module(MockServiceKey.self) { MockServiceImpl() }
