@@ -1,6 +1,7 @@
 import Foundation
 import ObjectiveC.runtime
 
+#if DEBUG
 public struct ModuleScanner {
     init() {}
     var classPtrInfo: (classesPtr: UnsafeMutablePointer<AnyClass>, numberOfClasses: Int)? {
@@ -91,13 +92,15 @@ public struct ModuleScanner {
 
 
 #if DEBUG
-        print("\n┌─────\(Self.self) \(#function)─────────────────────")
-        print("│Duration : ", (Date().timeIntervalSince(start) * 1000).rounded(), "ms")
-        print("│numberOfClasses : \(numberOfClasses)")
-        print("│InjectionKey classPtr Index : \(ptrIndex)")
-        print("│InjectionModulable List :")
-        print("│ - \(keys)")
-        print("└────────────────────────────────────────────────\n")
+        print("""
+        ┌───── \(Self.self) \(#function) ──────
+        │ Duration : \((Date().timeIntervalSince(start) * 1000).rounded())ms
+        │ numberOfClasses : \(numberOfClasses)
+        │ InjectionKey classPtr Index : \(ptrIndex)
+        │ InjectionKey List :
+        │  - \(keys)
+        └────────────────────────────────────────────────
+        """)
 #endif
         return keys
     }
@@ -142,13 +145,15 @@ public struct ModuleScanner {
 
 
 #if DEBUG
-        print("\n┌─────\(Self.self) \(#function)─────────────────────")
-        print("│Duration : ", (Date().timeIntervalSince(start) * 1000).rounded(), "ms")
-        print("│numberOfClasses : \(numberOfClasses)")
-        print("│InjectionKey classPtr Index List : \(ptrIndex)")
-        print("│InjectionModulable List :")
-        print("│ - \(keys)")
-        print("└────────────────────────────────────────────────\n")
+        print("""
+        ┌───── \(Self.self) \(#function) ─────────
+        │ Duration : \((Date().timeIntervalSince(start) * 1000).rounded())ms
+        │ numberOfClasses : \(numberOfClasses)
+        │ InjectionKey classPtr Index List : \(ptrIndex)
+        │ AutoModule List :
+        │  - \(keys)")
+        └────────────────────────────────────────────────
+        """)
 #endif
 
         return keys
@@ -159,3 +164,4 @@ public struct ModuleScanner {
             .compactMap { ($0 as? any AutoModule.Type)?.init().module }
     }
 }
+#endif

@@ -5,14 +5,6 @@ import XCTest
 @testable import DIContainer
 
 final class ModuleScannerTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-    }
-
-    override class func tearDown() {
-        super.tearDown()
-    }
-
     func test_ScanInjectKeys() {
         Container {
             Module(MockServiceKey.self) { MockServiceImpl() }
@@ -22,11 +14,13 @@ final class ModuleScannerTests: XCTestCase {
 
         let keyList = ModuleScanner().keyList
 
-        print("\n┌─────\(Self.self) \(#function)─────────────────────")
-        print("│InjectionKey는 \(keyList.count)개 있습니다")
-        print("│다음은 InjectionKey 목록입니다.")
-        print("\(dump(keyList))")
-        print("└────────────────────────────────────────────────\n")
+        print("""
+        ┌───── \(Self.self) \(#function) ──────────────
+        │ InjectionKey는 \(keyList.count)개 있습니다.
+        │ 다음은 InjectionKey 목록입니다.
+          \(dump(keyList))
+        └────────────────────────────────────────────────
+        """)
 
         XCTAssertEqual(keyList.isEmpty, false)
         XCTAssertEqual(keyList.count, 2)
@@ -43,11 +37,13 @@ final class ModuleScannerTests: XCTestCase {
     func test_ScanModules() {
         let moduleList = ModuleScanner().scanModuleList
 
-        print("\n┌─────\(Self.self) \(#function)─────────────────────")
-        print("│Module는 \(moduleList.count)개 있습니다.")
-        print("│다음은 Module 목록입니다.")
-        print("\(dump(moduleList))")
-        print("└────────────────────────────────────────────────\n")
+        print("""
+        ┌───── \(Self.self) \(#function) ─────────
+        │ Module는 \(moduleList.count)개 있습니다.
+        │ 다음은 Module 목록입니다.
+          - \(dump(moduleList))
+        └────────────────────────────────────────────────
+        """)
 
         XCTAssertEqual(moduleList.isEmpty, false)
         XCTAssertEqual(moduleList.count, 2)

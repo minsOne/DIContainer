@@ -10,6 +10,7 @@ public protocol AutoModulable: AnyObject {
 
 public typealias AutoModule = AutoModuleScanType & AutoModulable
 
+#if DEBUG
 public extension AutoModulable {
     var module: Module? {
         guard
@@ -19,4 +20,4 @@ public extension AutoModulable {
         return Module(ModuleKeyType.self) { instance }
     }
 }
-
+#endif
