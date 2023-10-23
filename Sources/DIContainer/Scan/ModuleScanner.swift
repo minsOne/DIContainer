@@ -102,20 +102,20 @@ public struct ModuleScanner {
         return keys
     }
 
-    var scanModuleTypeList: [any InjectionModulable.Type] {
+    var scanModuleTypeList: [any AutoModulable.Type] {
         guard let (classesPtr, numberOfClasses) = classPtrInfo else { return [] }
         defer { classesPtr.deallocate() }
 
         let start = Date()
         let (firstIndex, lastIndex) = (0, numberOfClasses)
-        var (keys, ptrIndex) = ([any InjectionModulable.Type](), [Int]())
-        let superCls = InjectionModuleScanType.self
+        var (keys, ptrIndex) = ([any AutoModulable.Type](), [Int]())
+        let superCls = AutoModuleScanType.self
 
 // MARK: Case 1 - class_getSuperclass
         for i in firstIndex ..< lastIndex {
             let cls: AnyClass = classesPtr[i]
             if class_getSuperclass(cls) == superCls,
-               case let kcls as any InjectionModulable.Type = cls {
+               case let kcls as any AutoModulable.Type = cls {
                 ptrIndex.append(i)
                 keys.append(kcls)
             }
@@ -156,6 +156,6 @@ public struct ModuleScanner {
 
     var scanModuleList: [Module] {
         scanModuleTypeList
-            .compactMap { ($0 as? any InjectionModule.Type)?.init().module }
+            .compactMap { ($0 as? any AutoModule.Type)?.init().module }
     }
 }

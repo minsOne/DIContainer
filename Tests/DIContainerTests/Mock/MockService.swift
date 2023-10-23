@@ -9,7 +9,7 @@ protocol MockService {
     func doSomething()
 }
 
-class MockServiceImpl: InjectionModule, MockService {
+class MockServiceImpl: AutoModule, MockService {
     typealias ModuleKeyType = MockServiceKey
 
     var count = 0

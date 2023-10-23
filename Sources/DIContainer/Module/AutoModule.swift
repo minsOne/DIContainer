@@ -1,16 +1,16 @@
 import Foundation
 
-open class InjectionModuleScanType {
+open class AutoModuleScanType {
     public required init() {}
 }
 
-public protocol InjectionModulable: AnyObject {
+public protocol AutoModulable: AnyObject {
     associatedtype ModuleKeyType: InjectionKeyType
 }
 
-public typealias InjectionModule = InjectionModuleScanType & InjectionModulable
+public typealias AutoModule = AutoModuleScanType & AutoModulable
 
-public extension InjectionModulable {
+public extension AutoModulable {
     var module: Module? {
         guard
             let instance = self as? ModuleKeyType.Value
