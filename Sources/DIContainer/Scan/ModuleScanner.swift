@@ -16,34 +16,6 @@ public struct ModuleScanner {
         return (classesPtr, numberOfClasses)
     }
 
-    var classList: [AnyClass] {
-        guard let (classesPtr, numberOfClasses) = classPtrInfo else { return [] }
-        defer { classesPtr.deallocate() }
-
-#if DEBUG
-        let start = Date()
-        defer {
-            print("\(Self.self) \(#function)", "Duration : ", (Date().timeIntervalSince(start) * 1000).rounded(), "ms", "numberOfClasses : \(numberOfClasses)")
-        }
-#endif
-
-        return (0 ..< numberOfClasses).map { classesPtr[$0] }
-    }
-
-    public func classes<T>() -> [T.Type] {
-        guard let (classesPtr, numberOfClasses) = classPtrInfo else { return [] }
-        defer { classesPtr.deallocate() }
-
-#if DEBUG
-        let start = Date()
-        defer {
-            print("\(Self.self) \(#function)", "Duration : ", (Date().timeIntervalSince(start) * 1000).rounded(), "ms", "numberOfClasses : \(numberOfClasses)")
-        }
-#endif
-
-        return (0 ..< numberOfClasses).compactMap { classesPtr[$0] as? T.Type }
-    }
-
     var keyList: [any InjectionKeyType.Type] {
         guard let (classesPtr, numberOfClasses) = classPtrInfo else { return [] }
         defer { classesPtr.deallocate() }
