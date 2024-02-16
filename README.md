@@ -4,7 +4,7 @@ DIContainer is lightweight dependency injection framework for Swift.
 
 ## Requirements
 
-- Swift 5.7+
+- Swift 5.9+
 
 ## Installation
 
