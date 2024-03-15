@@ -6,10 +6,17 @@ public struct Module {
     let resolve: () -> Any
 
     public init<T: InjectionKeyType, U>(
-        _ name: T.Type,
+        _ keyType: T.Type,
         _ resolve: @escaping () -> U
     ) where T.Value == U {
-        self.name = String(describing: name)
+        self.name = String(describing: keyType)
         self.resolve = resolve
+    }
+
+    public init<T: AutoModule>(_ moduleType: T.Type) {
+        name = String(describing: moduleType.ModuleKeyType.self)
+        resolve = {
+            moduleType.init()
+        }
     }
 }

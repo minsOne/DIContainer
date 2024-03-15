@@ -8,6 +8,7 @@ final class WeakInjectTests: XCTestCase {
 
         Container {
             Module(WeakMockServiceKey.self) { WeakMockServiceImpl() }
+            Module(MockServiceImpl.self)
         }
         .build()
     }

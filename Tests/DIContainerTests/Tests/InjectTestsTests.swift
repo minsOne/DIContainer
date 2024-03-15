@@ -1,42 +1,40 @@
+@testable import DIContainer
 import XCTest
 
-@testable import DIContainer
+class ContainerTests: XCTestCase {
+    private func testContainer(withSetup container: Container) {
+        container.build()
 
-final class InjectTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-
-        Container {
-            Module(MockServiceKey.self) { MockServiceImpl() }
-        }
-        .build()
+        testInjection()
+        testInjectBehavior()
     }
 
-    override class func tearDown() {
-        super.tearDown()
-    }
+    private func testInjection() {
+        let serviceKey = MockServiceKey.self
+        XCTAssertNotNil(serviceKey.module?.resolve())
+        XCTAssertNotNil(serviceKey.module?.resolve() as? MockServiceKey.Value)
+        XCTAssertNotNil(serviceKey.module?.resolve() as? MockService)
 
-    func test_컨테이너_등록여부_확인_1() {
-        XCTAssertNotNil(MockServiceKey.module?.resolve())
-        XCTAssertNotNil(MockServiceKey.module?.resolve() as? MockServiceKey.Value)
-        XCTAssertNotNil(MockServiceKey.module?.resolve() as? MockService)
-    }
-
-    func test_컨테이너_등록여부_확인_2() {
         @Inject(MockServiceKey.self) var service; _ = service
     }
 
-    func test_Inject동작확인_1() {
-        @Inject(MockServiceKey.self)
-        var service: MockService
-
+    private func testInjectBehavior() {
+        @Inject(MockServiceKey.self) var service: MockService
         service.doSomething()
         XCTAssertEqual((service as? MockServiceImpl)?.count, 1)
+        service.doSomething()
+        XCTAssertEqual((service as? MockServiceImpl)?.count, 2)
     }
 
-    func test_Inject동작확인_2() {
-        @Inject(MockServiceKey.self) var service
-        service.doSomething()
-        XCTAssertEqual((service as? MockServiceImpl)?.count, 1)
+    func test_container1() {
+        testContainer(withSetup: .init {
+            Module(MockServiceKey.self) { MockServiceImpl() }
+        })
+    }
+
+    func test_container2() {
+        testContainer(withSetup: .init {
+            Module(MockServiceImpl.self)
+        })
     }
 }
