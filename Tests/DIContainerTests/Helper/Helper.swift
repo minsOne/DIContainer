@@ -4,6 +4,6 @@ import Foundation
 
 extension InjectionKeyType {
     static var module: Module? {
-        Container.root.modules[String(describing: Self.self)]
+        return Container.root.module(Self.self)
     }
 }

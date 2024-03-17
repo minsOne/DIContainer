@@ -33,7 +33,7 @@ extension Container {
     /// Resolves through inference and returns an instance of the given type from the current default container.
     ///
     /// If the dependency is not found, an exception will occur.
-    static func resolve<T>(for type: Any.Type?) -> T {
+    static func resolve<T>(for type: AnyObject.Type) -> T {
         guard let component: T = weakResolve(for: type) else {
             fatalError("Dependency '\(T.self)' not resolved!")
         }
@@ -44,10 +44,13 @@ extension Container {
     /// Resolves through inference and returns an instance of the given type from the current default container.
     ///
     /// If the dependency is not found, return nil
-    static func weakResolve<T>(for type: Any.Type?) -> T? {
-        let name = type.map { String(describing: $0) } ?? String(describing: T.self)
+    static func weakResolve<T>(for type: AnyObject.Type) -> T? {
+        root.module(type)?.resolve() as? T
+    }
 
-        return root.modules[name]?.resolve() as? T
+    func module(_ type: AnyObject.Type) -> Module? {
+        let key = Utils().keyName(type)
+        return modules[key]
     }
 }
 

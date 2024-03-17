@@ -9,12 +9,12 @@ public struct Module {
         _ keyType: T.Type,
         _ resolve: @escaping () -> U
     ) where T.Value == U {
-        self.name = String(describing: keyType)
+        self.name = Utils().keyName(keyType)
         self.resolve = resolve
     }
 
     public init<T: AutoModule>(_ moduleType: T.Type) {
-        name = String(describing: moduleType.ModuleKeyType.self)
+        name = Utils().keyName(moduleType.ModuleKeyType.self)
         resolve = {
             moduleType.init()
         }
