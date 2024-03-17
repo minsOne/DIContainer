@@ -16,7 +16,7 @@ public extension InjectionKeyType {
     }
 }
 
-/// 직접 사용하지 말것
+/// DO NOT USE THIS CODE DIRECTLY
 open class InjectionKeyScanType {
     public init() {}
 }
