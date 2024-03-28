@@ -1,5 +1,6 @@
-@testable import DIContainer
 import XCTest
+
+@testable import DIContainer
 
 class ContainerTests: XCTestCase {
     private func testContainer(withSetup container: Container) {
