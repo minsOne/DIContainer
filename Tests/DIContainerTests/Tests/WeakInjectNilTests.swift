@@ -3,36 +3,34 @@ import XCTest
 @testable import DIContainer
 
 final class WeakInjectNilTests: XCTestCase {
-    let mock = WeakMockServiceImpl()
+    let mockService = WeakMockServiceImpl()
 
     override func setUp() {
         super.setUp()
 
-        Container()
-            .build()
+        // Given
+        Container().build()
     }
 
-    func test_컨테이너_등록여부_확인_1() {
-        XCTAssertNil(WeakMockServiceKey.module?.resolve())
-        XCTAssertNil(WeakMockServiceKey.module?.resolve() as? WeakMockServiceKey.Value)
-        XCTAssertNil(WeakMockServiceKey.module?.resolve() as? WeakMockService)
+    func testContainerDoesNotContainWeakMockService() {
+        // When
+        let weakMockService = WeakMockServiceKey.module?.resolve()
+        let weakMockServiceImpl = WeakMockServiceKey.module?.resolve() as? WeakMockServiceKey.Value
+        let weakMockServiceProtocol = WeakMockServiceKey.module?.resolve() as? WeakMockService
+
+        // Then
+        XCTAssertNil(weakMockService)
+        XCTAssertNil(weakMockServiceImpl)
+        XCTAssertNil(weakMockServiceProtocol)
     }
 
-    func test_컨테이너_등록여부_확인_2() {
-        do {
-            @WeakInject(WeakMockServiceKey.self) var service
-            XCTAssertNil(service)
-        }
+    func testWeakInjectReturnsNil() {
+        // When
+        @WeakInject(WeakMockServiceKey.self) var service1
+        @WeakInject(WeakMockServiceKey.self) var service2: WeakMockService?
 
-        do {
-            @WeakInject(WeakMockServiceKey.self)
-            var service: WeakMockService?
-            XCTAssertNil(service)
-        }
-
-        do {
-            @WeakInject(WeakMockServiceKey.self) var service
-            XCTAssertNil(service)
-        }
+        // Then
+        XCTAssertNil(service1)
+        XCTAssertNil(service2)
     }
 }
