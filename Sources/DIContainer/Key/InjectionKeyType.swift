@@ -17,6 +17,6 @@ public extension InjectionKeyType {
 }
 
 /// DO NOT USE THIS CODE DIRECTLY
-open class InjectionKeyScanType {}
+open class InjectionBaseKeyType {}
 
-public typealias InjectionKey = InjectionKeyScanType & InjectionKeyType
+public typealias InjectionKey = InjectionBaseKeyType & InjectionKeyType

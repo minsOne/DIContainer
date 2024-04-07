@@ -1,6 +1,6 @@
 import Foundation
 
-open class AutoModuleScanType {
+open class AutoModuleBase {
     public required init() {}
 }
 
@@ -8,7 +8,7 @@ public protocol AutoModulable: AnyObject {
     associatedtype ModuleKeyType: InjectionKeyType
 }
 
-public typealias AutoModule = AutoModuleScanType & AutoModulable
+public typealias AutoModule = AutoModuleBase & AutoModulable
 
 #if DEBUG
 public extension AutoModulable {

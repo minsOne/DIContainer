@@ -23,7 +23,7 @@ public struct ModuleScanner {
         let start = Date()
         let (firstIndex, lastIndex) = (0, numberOfClasses)
         var (keys, ptrIndex) = ([any InjectionKeyType.Type](), [Int]())
-        let superCls = InjectionKeyScanType.self
+        let superCls = InjectionBaseKeyType.self
 
 // MARK: Case 1 - class_getSuperclass
         for i in firstIndex ..< lastIndex {
@@ -84,7 +84,7 @@ public struct ModuleScanner {
         let start = Date()
         let (firstIndex, lastIndex) = (0, numberOfClasses)
         var (keys, ptrIndex) = ([any AutoModulable.Type](), [Int]())
-        let superCls = AutoModuleScanType.self
+        let superCls = AutoModuleBase.self
 
 // MARK: Case 1 - class_getSuperclass
         for i in firstIndex ..< lastIndex {
