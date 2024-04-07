@@ -1,7 +1,7 @@
 import DIContainer
 import Foundation
 
-class WeakMockServiceKey: InjectionKey {
+final class WeakMockServiceKey: InjectionKey {
     typealias Value = WeakMockService
 }
 
@@ -9,7 +9,7 @@ protocol WeakMockService {
     func doSomething()
 }
 
-class WeakMockServiceImpl: AutoModule, WeakMockService {
+final class WeakMockServiceImpl: AutoModule, WeakMockService {
     typealias ModuleKeyType = WeakMockServiceKey
 
     var count = 0

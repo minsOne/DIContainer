@@ -13,11 +13,8 @@ public typealias AutoModule = AutoModuleScanType & AutoModulable
 #if DEBUG
 public extension AutoModulable {
     var module: Module? {
-        guard
-            let instance = self as? ModuleKeyType.Value
-        else { return nil }
-
-        return Module(ModuleKeyType.self) { instance }
+        (self as? ModuleKeyType.Value)
+            .map { instance in Module(ModuleKeyType.self) { instance } }
     }
 }
 #endif

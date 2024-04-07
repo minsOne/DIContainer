@@ -1,7 +1,8 @@
 import Foundation
 
-struct Utils {
-    func keyName(_ type: AnyObject.Type) -> String {
-        NSStringFromClass(type)
+struct KeyName {
+    let name: String
+    init(_ type: AnyObject.Type) {
+        name = NSStringFromClass(type)
     }
 }

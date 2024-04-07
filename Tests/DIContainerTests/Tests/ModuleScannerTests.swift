@@ -8,7 +8,7 @@ final class ModuleScannerTests: XCTestCase {
     func test_ScanInjectKeys() {
         Container {
             Module(MockServiceKey.self) { MockServiceImpl() }
-            Module(WeakMockServiceKey.self) { WeakMockServiceImpl() }
+            Module(WeakMockServiceImpl.self)
         }
         .build()
 

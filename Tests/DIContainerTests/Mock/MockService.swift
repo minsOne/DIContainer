@@ -1,7 +1,7 @@
 import DIContainer
 import Foundation
 
-class MockServiceKey: InjectionKey {
+final class MockServiceKey: InjectionKey {
     typealias Value = MockService
 }
 
@@ -9,7 +9,7 @@ protocol MockService {
     func doSomething()
 }
 
-class MockServiceImpl: AutoModule, MockService {
+final class MockServiceImpl: AutoModule, MockService {
     typealias ModuleKeyType = MockServiceKey
 
     var count = 0
