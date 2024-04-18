@@ -4,6 +4,7 @@ import ObjectiveC.runtime
 #if DEBUG
 public struct ModuleScanner {
     init() {}
+
     var classPtrInfo: (classesPtr: UnsafeMutablePointer<AnyClass>, numberOfClasses: Int)? {
         let numberOfClasses = Int(objc_getClassList(nil, 0))
         guard numberOfClasses > 0 else { return nil }

@@ -1,7 +1,7 @@
 import Foundation
 
 /// A type that contributes to the object graph.
-public struct Module {
+public struct Module: Hashable {
     let name: String
     let resolve: () -> Any
 
@@ -18,5 +18,13 @@ public struct Module {
         resolve = {
             moduleType.init()
         }
+    }
+
+    public static func == (lhs: Module, rhs: Module) -> Bool {
+        lhs.name == rhs.name
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
     }
 }
