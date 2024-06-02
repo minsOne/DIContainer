@@ -2,29 +2,28 @@
 
 [English](README.md) | [한국어](README-ko.md)
 
-## Overview
+## 개요
+Swift 의존성 주입 컨테이너는 Swift 애플리케이션에서 의존성 관리를 용이하게 하기 위해 설계된 경량화되고 유연한 라이브러리입니다. 이 라이브러리는 코드베이스 전반에 걸쳐 의존성을 해결하는 구조화되고 타입 안전한 접근 방식을 제공하여 코드 재사용성, 테스트 용이성 및 유지 관리성을 향상시킵니다.
 
-The Swift Dependency Injection Container is a lightweight and flexible library designed to facilitate dependency management in Swift applications. It provides a structured and type-safe approach to resolve dependencies throughout your codebase, promoting code reusability, testability, and maintainability.
+## 기능
+- 타입 안전 의존성 해결.
+- 의존성의 지연 인스턴스화.
+- 편리한 의존성 주입을 위한 프로퍼티 래퍼.
+- 동적 모듈 등록 및 관리.
+- 선언적 모듈 등록을 위한 결과 빌더 구문.
+- 모듈 및 주입 키 스캐닝을 위한 디버그 유틸리티.
 
-## Features
-- Type-safe dependency resolution.
-- Lazy instantiation of dependencies.
-- Property wrappers for convenient dependency injection.
-- Dynamic module registration and management.
-- Result builder syntax for declarative module registration.
-- Debug utilities for module and injection key scanning.
-
-## Requirements
+## 요구사항
 
 - Swift 5.9+
 
-## Installation
+## 설치
 
-DIContainer is available [Swift Package Manager](https://swift.org/package-manager/).
+DIContainer는 [Swift Package Manager](https://swift.org/package-manager/)를 사용할 수 있습니다.
 
 ### Swift Package Manager
 
-in `Package.swift` add the following:
+`Package.swift` 파일에 이 라이브러리를 의존성으로 추가할 수 있습니다.
 
 ```swift
 dependencies: [
@@ -32,7 +31,7 @@ dependencies: [
 ]
 ```
 
-## Usage
+## 사용법
 
 ### Basic Usage
 
@@ -79,16 +78,16 @@ $ swift test
 $ swift test -Xswiftc -O
 ```
 
-## Contributing
-Contributions to the Swift Dependency Injection Container are welcome. Here are ways you can contribute:
-- Reporting issues
-- Suggesting enhancements
-- Submitting pull requests with bug fixes or new features
+## 기여
+Swift 의존성 주입 컨테이너에 대한 기여는 언제나 환영합니다. 다음과 같은 방식으로 기여할 수 있습니다.
+- 이슈 보고
+- 기능 개선 제안
+- 버그 수정 또는 새로운 기능을 위한 풀 요청 제출
 
-Please ensure to follow the coding standards and write tests for new functionality.
+새로운 기능을 추가할 때는 코딩 표준을 따르고 테스트를 작성해 주시기 바랍니다.
 
-## License
-This project is licensed under the [MIT License](LICENSE).
+## 라이센스
+이 프로젝트는 [MIT 라이선스](LICENSE)를 따릅니다.
 
 ## Post
 
@@ -98,7 +97,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Credits
 
-The DIContainer are inspired by:
+DIContainer는 다음 자료에서 영감을 받았습니다:
 
 * [Dependency Injection in Swift using latest Swift features](https://www.avanderlee.com/swift/dependency-injection/)
 * [iOS Dependency Injection Using Swinject](https://ali-akhtar.medium.com/ios-dependency-injection-using-swinject-9c4ceff99e41)
