@@ -1,11 +1,9 @@
-import XCTest
+import Testing
 
 @testable import DIContainer
 
-final class WeakInjectTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-
+struct WeakInjectTests {
+    init() {
         // Given
         Container {
             Module(WeakMockServiceKey.self) { WeakMockServiceImpl() }
@@ -14,6 +12,7 @@ final class WeakInjectTests: XCTestCase {
         .build()
     }
 
+    @Test
     func testContainerRegistration1() {
         // When
         let weakMockService = WeakMockServiceKey.module?.resolve()
@@ -21,48 +20,51 @@ final class WeakInjectTests: XCTestCase {
         let weakMockServiceProtocol = WeakMockServiceKey.module?.resolve() as? WeakMockService
 
         // Then
-        XCTAssertNotNil(weakMockService)
-        XCTAssertNotNil(weakMockServiceImpl)
-        XCTAssertNotNil(weakMockServiceProtocol)
+        #expect(weakMockService.isNotNil)
+        #expect(weakMockServiceImpl.isNotNil)
+        #expect(weakMockServiceProtocol.isNotNil)
     }
 
+    @Test
     func testContainerRegistration2() {
         // When
         @WeakInject(WeakMockServiceKey.self) var service1
         @WeakInject(MockServiceKey.self) var service2
 
         // Then
-        XCTAssertNotNil(service1)
-        XCTAssertNotNil(service2)
+        #expect(service1.isNotNil)
+        #expect(service2.isNotNil)
     }
 
+    @Test
     func testWeakInjectBehavior1() {
         // When
         @WeakInject(WeakMockServiceKey.self) var service1: WeakMockService?
         @WeakInject(MockServiceKey.self) var service2: MockService?
 
         // Then
-        XCTAssertNotNil(service1)
+        #expect(service1.isNotNil)
         service1?.doSomething()
-        XCTAssertEqual((service1 as? WeakMockServiceImpl)?.count, 1)
+        #expect((service1 as? WeakMockServiceImpl)?.count == 1)
 
-        XCTAssertNotNil(service2)
+        #expect(service2.isNotNil)
         service2?.doSomething()
-        XCTAssertEqual((service2 as? MockServiceImpl)?.count, 1)
+        #expect((service2 as? MockServiceImpl)?.count == 1)
     }
 
+    @Test
     func testWeakInjectBehavior2() {
         // When
         @WeakInject(WeakMockServiceKey.self) var service1
         @WeakInject(MockServiceKey.self) var service2
 
         // Then
-        XCTAssertNotNil(service1)
+        #expect(service1.isNotNil)
         service1?.doSomething()
-        XCTAssertEqual((service1 as? WeakMockServiceImpl)?.count, 1)
+        #expect((service1 as? WeakMockServiceImpl)?.count == 1)
 
-        XCTAssertNotNil(service2)
+        #expect(service2.isNotNil)
         service2?.doSomething()
-        XCTAssertEqual((service2 as? MockServiceImpl)?.count, 1)
+        #expect((service2 as? MockServiceImpl)?.count == 1)
     }
 }

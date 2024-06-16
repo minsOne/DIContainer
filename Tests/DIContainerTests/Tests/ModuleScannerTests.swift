@@ -1,10 +1,11 @@
 import Foundation
 import MockData
-import XCTest
+import Testing
 
 @testable import DIContainer
 
-final class ModuleScannerTests: XCTestCase {
+struct ModuleScannerTests {
+    @Test
     func test_ScanInjectKeys() {
         Container {
             Module(MockServiceKey.self) { MockServiceImpl() }
@@ -22,18 +23,19 @@ final class ModuleScannerTests: XCTestCase {
         └────────────────────────────────────────────────
         """)
 
-        XCTAssertEqual(keyList.isEmpty, false)
-        XCTAssertEqual(keyList.count, 2)
+        #expect(keyList.isEmpty == false)
+        #expect(keyList.count == 2)
 
         for key in keyList {
             let obj: any Any = Container.resolve(for: key)
 
             if case Optional<Any>.none = obj {
-                XCTFail("\(key)가 등록되어 있지 않습니다.")
+                assertionFailure("\(key)가 등록되어 있지 않습니다.")
             }
         }
     }
 
+    @Test
     func test_ScanModules() {
         let moduleList = ModuleScanner().scanModuleList
 
@@ -45,8 +47,8 @@ final class ModuleScannerTests: XCTestCase {
         └────────────────────────────────────────────────
         """)
 
-        XCTAssertEqual(moduleList.isEmpty, false)
-        XCTAssertEqual(moduleList.count, 2)
+        #expect(moduleList.isEmpty == false)
+        #expect(moduleList.count == 2)
 
         Container(modules: moduleList)
             .build()

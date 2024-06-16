@@ -7,3 +7,12 @@ extension InjectionKeyType {
         return Container.root.module(Self.self)
     }
 }
+
+extension Optional {
+    var isNil: Bool {
+        self == nil
+    }
+    var isNotNil: Bool {
+        !isNil
+    }
+}

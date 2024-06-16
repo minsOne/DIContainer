@@ -1,14 +1,16 @@
-import XCTest
+import Testing
 
 @testable import DIContainer
 
-class ContainerTests: XCTestCase {
+struct ContainerTests {
+    @Test
     func test_container1() {
         testContainer(withSetup: .init {
             Module(MockServiceKey.self) { MockServiceImpl() }
         })
     }
 
+    @Test
     func test_container2() {
         testContainer(withSetup: .init {
             Module(MockServiceImpl.self)
@@ -26,9 +28,9 @@ extension ContainerTests {
 
     private func injection() {
         let serviceKey = MockServiceKey.self
-        XCTAssertNotNil(serviceKey.module?.resolve())
-        XCTAssertNotNil(serviceKey.module?.resolve() as? MockServiceKey.Value)
-        XCTAssertNotNil(serviceKey.module?.resolve() as? MockService)
+        #expect((serviceKey.module?.resolve()).isNotNil)
+        #expect((serviceKey.module?.resolve() as? MockServiceKey.Value).isNotNil)
+        #expect((serviceKey.module?.resolve() as? MockService).isNotNil)
 
         @Inject(MockServiceKey.self) var service; _ = service
     }
@@ -36,6 +38,6 @@ extension ContainerTests {
     private func injectBehavior() {
         @Inject(MockServiceKey.self) var service: MockService
         service.doSomething()
-        XCTAssertEqual((service as? MockServiceImpl)?.count, 1)
+        #expect((service as? MockServiceImpl)?.count == 1)
     }
 }
