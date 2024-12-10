@@ -2,6 +2,7 @@ import XCTest
 
 @testable import DIContainer
 
+@MainActor
 class ContainerTests: XCTestCase {
     func test_container1() {
         testContainer(withSetup: .init {

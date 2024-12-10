@@ -1,14 +1,17 @@
 import DIContainer
 import Foundation
 
+@MainActor
 final class MockServiceKey: InjectionKey {
     typealias Value = MockService
 }
 
+@MainActor
 protocol MockService {
     func doSomething()
 }
 
+@MainActor
 final class MockServiceImpl: AutoModule, MockService {
     typealias ModuleKeyType = MockServiceKey
 

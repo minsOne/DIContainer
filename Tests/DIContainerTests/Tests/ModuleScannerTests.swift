@@ -1,11 +1,14 @@
 import Foundation
 import MockData
+import Testing
 import XCTest
 
 @testable import DIContainer
 
-final class ModuleScannerTests: XCTestCase {
-    func test_ScanInjectKeys() {
+@MainActor
+struct ModuleScannerTest {
+    @Test
+    func scanInjectKeys() {
         Container {
             Module(MockServiceKey.self) { MockServiceImpl() }
             Module(WeakMockServiceImpl.self)
@@ -34,7 +37,8 @@ final class ModuleScannerTests: XCTestCase {
         }
     }
 
-    func test_ScanModules() {
+    @Test
+    func scanModules() {
         let moduleList = ModuleScanner().scanModuleList
 
         print("""

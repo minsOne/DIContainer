@@ -1,10 +1,13 @@
 import Foundation
+import Testing
 import XCTest
 
 @testable import DIContainer
 
-final class ModuleListExtensionTests: XCTestCase {
-    func testReplaceOneModule() {
+@MainActor
+struct ModuleListExtensionTest {
+    @Test
+    func replaceOneModule() {
         // Given
         let newModule = Module(MockServiceKey.self) { Service1() }
         var moduleList = ModuleScanner().scanModuleList
@@ -23,7 +26,8 @@ final class ModuleListExtensionTests: XCTestCase {
         XCTAssertEqual(service?.count, 1)
     }
 
-    func testReplaceMultipleModules() {
+    @Test
+    func replaceMultipleModules() {
         // Given
         let newModule1 = Module(MockServiceKey.self) { Service1() }
         let newModule2 = Module(WeakMockServiceKey.self) { Service2() }
@@ -60,7 +64,7 @@ final class ModuleListExtensionTests: XCTestCase {
     }
 }
 
-private extension ModuleListExtensionTests {
+private extension ModuleListExtensionTest {
     final class Service1: MockService {
         var count = 0
 

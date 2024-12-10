@@ -63,8 +63,6 @@ public struct ModuleScanner {
 //            }
 //        }
 
-
-#if DEBUG
         print("""
         ┌───── \(Self.self) \(#function) ──────
         │ Duration : \((Date().timeIntervalSince(start) * 1000).rounded())ms
@@ -74,7 +72,6 @@ public struct ModuleScanner {
         │  - \(keys)
         └────────────────────────────────────────────────
         """)
-#endif
         return keys
     }
 
@@ -116,8 +113,6 @@ public struct ModuleScanner {
 //            }
 //        }
 
-
-#if DEBUG
         print("""
         ┌───── \(Self.self) \(#function) ─────────
         │ Duration : \((Date().timeIntervalSince(start) * 1000).rounded())ms
@@ -127,7 +122,6 @@ public struct ModuleScanner {
         │  - \(keys)")
         └────────────────────────────────────────────────
         """)
-#endif
 
         return keys
     }

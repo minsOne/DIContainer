@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 @propertyWrapper
 public class Inject<Value> {
     private let lazyValue: () -> Value

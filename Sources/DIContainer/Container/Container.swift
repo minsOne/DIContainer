@@ -1,7 +1,8 @@
 import Foundation
 
 public class Container {
-    static var root = Container()
+    @MainActor
+    private(set) static var root = Container()
 
     /// Stored object instance factories.
     var modules: [String: Module] = [:]
@@ -29,11 +30,12 @@ public extension Container {
     }
 }
 
+@MainActor
 extension Container {
     /// Resolves through inference and returns an instance of the given type from the current default container.
     ///
     /// If the dependency is not found, an exception will occur.
-    static func resolve<T>(for type: AnyObject.Type) -> T {
+    static func resolve<T, U: InjectionKeyType>(for type: U.Type) -> T {
         guard let component: T = weakResolve(for: type) else {
             fatalError("Dependency '\(T.self)' not resolved!")
         }
@@ -44,11 +46,11 @@ extension Container {
     /// Resolves through inference and returns an instance of the given type from the current default container.
     ///
     /// If the dependency is not found, return nil
-    static func weakResolve<T>(for type: AnyObject.Type) -> T? {
+    static func weakResolve<T, U: InjectionKeyType>(for type: U.Type) -> T? {
         root.module(type)?.resolve() as? T
     }
 
-    func module(_ type: AnyObject.Type) -> Module? {
+    func module<T: InjectionKeyType>(_ type: T.Type) -> Module? {
         let keyName = KeyName(type).name
         return modules[keyName]
     }
@@ -56,7 +58,8 @@ extension Container {
 
 public extension Container {
     /// DSL for declaring modules within the container dependency initializer.
-    @resultBuilder enum ContainerBuilder {
+    @resultBuilder
+    enum ContainerBuilder {
         public static func buildBlock(_ modules: Module...) -> [Module] { modules }
         public static func buildBlock(_ module: Module) -> Module { module }
     }
@@ -78,10 +81,23 @@ public extension Container {
         self.init()
         register(contentsOf: [module()])
     }
+}
 
+@MainActor
+public extension Container {
     /// Assigns the current container to the composition root.
     func build() {
         // Used later in property wrapper
         Self.root = self
     }
 }
+
+#if DEBUG
+@MainActor
+public extension Container {
+    static func clear() {
+        root.modules.removeAll()
+    }
+}
+
+#endif
