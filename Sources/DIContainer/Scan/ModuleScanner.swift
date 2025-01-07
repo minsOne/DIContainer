@@ -3,7 +3,7 @@ import ObjectiveC.runtime
 
 #if DEBUG
 public struct ModuleScanner {
-    init() {}
+    public init() {}
 
     var classPtrInfo: (classesPtr: UnsafeMutablePointer<AnyClass>, numberOfClasses: Int)? {
         let numberOfClasses = Int(objc_getClassList(nil, 0))
@@ -17,7 +17,7 @@ public struct ModuleScanner {
         return (classesPtr, numberOfClasses)
     }
 
-    var keyList: [any InjectionKeyType.Type] {
+    public var keyList: [any InjectionKeyType.Type] {
         guard let (classesPtr, numberOfClasses) = classPtrInfo else { return [] }
         defer { classesPtr.deallocate() }
 
@@ -75,7 +75,7 @@ public struct ModuleScanner {
         return keys
     }
 
-    var scanModuleTypeList: [any AutoModulable.Type] {
+    public var scanModuleTypeList: [any AutoModulable.Type] {
         guard let (classesPtr, numberOfClasses) = classPtrInfo else { return [] }
         defer { classesPtr.deallocate() }
 
@@ -119,14 +119,14 @@ public struct ModuleScanner {
         │ numberOfClasses : \(numberOfClasses)
         │ InjectionKey classPtr Index List : \(ptrIndex)
         │ AutoModule List :
-        │  - \(keys)")
+        │  - \(keys)
         └────────────────────────────────────────────────
         """)
 
         return keys
     }
 
-    var scanModuleList: [Module] {
+    public var scanModuleList: [Module] {
         scanModuleTypeList
             .compactMap { ($0 as? any AutoModule.Type)?.init().module }
     }
