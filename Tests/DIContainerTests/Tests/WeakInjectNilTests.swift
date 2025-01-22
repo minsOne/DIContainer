@@ -4,6 +4,7 @@ import XCTest
 @testable import DIContainer
 
 @MainActor
+@Suite(.serialized)
 struct WeakInjectNilTest {
     init() {
         Container().build()

@@ -12,12 +12,15 @@ import Testing
 import XCTest
 
 @MainActor
-struct MachOLoaderTests {
+@Suite(.serialized)
+struct MachOLoaderTests {}
+
+extension MachOLoaderTests {
     @Test
     func findAllTypes() {
-        #expect(MachOLoader().keyList.count == 2)
-        #expect(MachOLoader().scanModuleTypeList.count == 2)
-        #expect(MachOLoader().scanModuleList.count == 2)
+        #expect(MachOLoader().keyList.count == 3)
+        #expect(MachOLoader().scanModuleTypeList.count == 3)
+        #expect(MachOLoader().scanModuleList.count == 3)
     }
 }
 

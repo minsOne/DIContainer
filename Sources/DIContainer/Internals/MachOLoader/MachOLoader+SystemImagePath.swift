@@ -9,8 +9,8 @@ extension MachOLoader {
     func isSystemImage(_ imageName: String) -> Bool {
         let systemImagePaths: [String] = [
             "/Library/Developer/CoreSimulator",
-            "/Developer/Library/Xcode",
-            "/Developer/Library/PrivateFrameworks",
+            "/Developer/Library",
+            "/usr/lib",
         ]
 
         // 시스템 이미지 경로가 포함되는지 검사

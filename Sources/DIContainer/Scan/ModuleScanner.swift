@@ -132,3 +132,13 @@ public struct ModuleScanner {
     }
 }
 #endif
+
+#if DEBUG
+public extension Container {
+    @MainActor
+    static func autoRegisterModules() {
+        let moduleList = ModuleScanner().scanModuleList
+        Container(modules: moduleList).build()
+    }
+}
+#endif

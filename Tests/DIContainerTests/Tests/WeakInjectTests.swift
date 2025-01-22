@@ -4,12 +4,14 @@ import XCTest
 @testable import DIContainer
 
 @MainActor
+@Suite(.serialized)
 struct WeakInjectTest {
     init() {
         // Given
         Container {
             Module(WeakMockServiceKey.self) { WeakMockServiceImpl() }
             Module(MockServiceImpl.self)
+            Module(MockServiceFactoryKey.self) { MockServiceFactory() }
         }
         .build()
     }
@@ -24,9 +26,9 @@ extension WeakInjectTest {
         let weakMockServiceProtocol = WeakMockServiceKey.module?.resolve() as? WeakMockService
         
         // Then
-        XCTAssertNotNil(weakMockService)
-        XCTAssertNotNil(weakMockServiceImpl)
-        XCTAssertNotNil(weakMockServiceProtocol)
+        #expect(weakMockService != nil)
+        #expect(weakMockServiceImpl != nil)
+        #expect(weakMockServiceProtocol != nil)
     }
     
     @Test
@@ -34,10 +36,12 @@ extension WeakInjectTest {
         // When
         @WeakInject(WeakMockServiceKey.self) var service1
         @WeakInject(MockServiceKey.self) var service2
+        @WeakInject(MockServiceFactoryKey.self) var factory
         
         // Then
-        XCTAssertNotNil(service1)
-        XCTAssertNotNil(service2)
+        #expect(service1 != nil)
+        #expect(service2 != nil)
+        #expect(factory != nil)
     }
     
     @Test
@@ -47,13 +51,13 @@ extension WeakInjectTest {
         @WeakInject(MockServiceKey.self) var service2: MockService?
         
         // Then
-        XCTAssertNotNil(service1)
+        #expect(service1 != nil)
         service1?.doSomething()
-        XCTAssertEqual((service1 as? WeakMockServiceImpl)?.count, 1)
+        #expect((service1 as? WeakMockServiceImpl)?.count == 1)
         
-        XCTAssertNotNil(service2)
+        #expect(service2 != nil)
         service2?.doSomething()
-        XCTAssertEqual((service2 as? MockServiceImpl)?.count, 1)
+        #expect((service2 as? MockServiceImpl)?.count == 1)
     }
     
     @Test
@@ -63,12 +67,23 @@ extension WeakInjectTest {
         @WeakInject(MockServiceKey.self) var service2
         
         // Then
-        XCTAssertNotNil(service1)
+        #expect(service1 != nil)
         service1?.doSomething()
-        XCTAssertEqual((service1 as? WeakMockServiceImpl)?.count, 1)
+        #expect((service1 as? WeakMockServiceImpl)?.count == 1)
         
-        XCTAssertNotNil(service2)
+        #expect(service2 != nil)
         service2?.doSomething()
-        XCTAssertEqual((service2 as? MockServiceImpl)?.count, 1)
+        #expect((service2 as? MockServiceImpl)?.count == 1)
+    }
+    
+    @Test
+    func factoryBehavior() {
+        @WeakInject(MockServiceFactoryKey.self) var factory
+        let service = factory?.makeWeakService()
+
+        #expect(service != nil)
+        service?.doSomething()
+
+        #expect((service as? WeakMockServiceImpl)?.count == 1)
     }
 }
