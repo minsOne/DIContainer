@@ -2,6 +2,10 @@ import Foundation
 
 open class AutoModuleBase {
     public required init() {}
+
+    fileprivate func __newInstance() -> Self {
+        Self()
+    }
 }
 
 public protocol AutoModulable: AnyObject {
@@ -11,10 +15,17 @@ public protocol AutoModulable: AnyObject {
 public typealias AutoModule = AutoModuleBase & AutoModulable
 
 #if DEBUG
-public extension AutoModulable {
+extension AutoModulable {
     var module: Module? {
-        (self as? ModuleKeyType.Value)
-            .map { instance in Module(ModuleKeyType.self) { instance } }
+        guard
+            let instance = self as? ModuleKeyType.Value,
+            let autoModuleBase = instance as? AutoModuleBase
+        else { return nil }
+
+        return Module(ModuleKeyType.self) {
+            (autoModuleBase.__newInstance() as? ModuleKeyType.Value)
+                ?? instance
+        }
     }
 }
 #endif

@@ -1,5 +1,5 @@
 //
-//  CachedModuleTests.swift
+//  AutoModuleIsNotCachedTests.swift
 //  DIContainer
 //
 //  Created by minsOne on 1/23/25.
@@ -11,29 +11,27 @@ import Testing
 
 @MainActor
 @Suite(.serialized)
-struct CachedModuleTests {
+struct AutoModuleIsNotCachedTests {
     init() {
         Container.autoRegisterModules()
     }
 }
 
-extension CachedModuleTests {
+extension AutoModuleIsNotCachedTests {
     @Test
-    func cachedModule() throws {
-        let service1 = getMockService()
-        let service2 = getMockService()
+    func scannedModule() throws {
+        let _service1 = getMockService()
+        let _service2 = getMockService()
 
-        service1.doSomething()
-        do {
-            let service = try #require(service1 as? MockServiceImpl)
-            #expect(service.count == 1)
-        }
+        _service1.doSomething()
+        let service1 = try #require(_service1 as? MockServiceImpl)
+        #expect(service1.count == 1)
 
-        service2.doSomething()
-        do {
-            let service = try #require(service2 as? MockServiceImpl)
-            #expect(service.count == 2)
-        }
+        _service2.doSomething()
+        let service2 = try #require(_service2 as? MockServiceImpl)
+        #expect(service2.count == 1)
+        
+        #expect((service1 === service2) == false)
     }
 
     @Test
@@ -48,10 +46,10 @@ extension CachedModuleTests {
             let service = try #require(service1 as? MockServiceImpl)
             #expect(service.count == 1)
         }
-        
+
         let service2 = factory2.makeService()
         service2.doSomething()
-        
+
         do {
             let service = try #require(service2 as? MockServiceImpl)
             #expect(service.count == 1)
@@ -59,7 +57,7 @@ extension CachedModuleTests {
     }
 }
 
-extension CachedModuleTests {
+private extension AutoModuleIsNotCachedTests {
     func getMockService() -> MockService {
         @Inject(MockServiceKey.self) var service
         return service
