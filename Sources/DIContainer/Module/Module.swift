@@ -9,22 +9,29 @@ public struct Module: Hashable {
         _ keyType: T.Type,
         _ resolve: @escaping () -> U
     ) where T.Value == U {
-        name = KeyName(keyType).name
-        self.resolve = resolve
+        let name = KeyName(keyType).name
+        self.init(name: name, resolve: resolve)
     }
 
     public init<T: AutoModule>(_ moduleType: T.Type) {
-        name = KeyName(moduleType.ModuleKeyType.self).name
-        resolve = {
+        let name = KeyName(moduleType.ModuleKeyType.self).name
+        self.init(name: name, resolve: {
             moduleType.init()
-        }
+        })
     }
 
-    public static func == (lhs: Module, rhs: Module) -> Bool {
+    init(name: String, resolve: @escaping () -> Any) {
+        self.name = name
+        self.resolve = resolve
+    }
+}
+
+public extension Module {
+    static func == (lhs: Module, rhs: Module) -> Bool {
         lhs.name == rhs.name
     }
-    
-    public func hash(into hasher: inout Hasher) {
+
+    func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }
 }

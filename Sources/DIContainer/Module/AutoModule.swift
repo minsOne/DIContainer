@@ -12,11 +12,17 @@ public protocol AutoModulable: AnyObject {
     associatedtype ModuleKeyType: InjectionKeyType
 }
 
-public typealias AutoModule = AutoModuleBase & AutoModulable
+public typealias AutoModule = AutoModulable & AutoModuleBase
 
 #if DEBUG
+extension AutoModulable where Self: AutoModuleBase {
+    static var module: Module? {
+        Self().module
+    }
+}
+
 extension AutoModulable {
-    var module: Module? {
+    private var module: Module? {
         guard
             let instance = self as? ModuleKeyType.Value,
             let autoModuleBase = instance as? AutoModuleBase

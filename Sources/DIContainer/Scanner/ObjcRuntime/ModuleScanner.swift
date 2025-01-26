@@ -81,7 +81,7 @@ public struct ModuleScanner {
 
         let start = Date()
         let (firstIndex, lastIndex) = (0, numberOfClasses)
-        var (keys, ptrIndex) = ([any AutoModulable.Type](), [Int]())
+        var (modules, ptrIndex) = ([any AutoModulable.Type](), [Int]())
         let superCls = AutoModuleBase.self
 
 // MARK: Case 1 - class_getSuperclass
@@ -90,7 +90,7 @@ public struct ModuleScanner {
             if class_getSuperclass(cls) == superCls,
                case let kcls as any AutoModulable.Type = cls {
                 ptrIndex.append(i)
-                keys.append(kcls)
+                modules.append(kcls)
             }
         }
 
@@ -119,16 +119,16 @@ public struct ModuleScanner {
         │ numberOfClasses : \(numberOfClasses)
         │ InjectionKey classPtr Index List : \(ptrIndex)
         │ AutoModule List :
-        │  - \(keys)
+        │  - \(modules)
         └────────────────────────────────────────────────
         """)
 
-        return keys
+        return modules
     }
 
     public var scanModuleList: [Module] {
         scanModuleTypeList
-            .compactMap { ($0 as? any AutoModule.Type)?.init().module }
+            .compactMap { ($0 as? any AutoModule.Type)?.module }
     }
 }
 #endif

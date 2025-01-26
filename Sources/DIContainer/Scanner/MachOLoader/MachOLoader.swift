@@ -1,5 +1,5 @@
 //
-//  machOLoader.swift
+//  MachOLoader.swift
 //  DIContainer
 //
 //  Created by minsOne on 12/10/24.
@@ -60,7 +60,7 @@ public extension MachOLoader {
 
     var scanModuleList: [Module] {
         scanModuleTypeList
-            .compactMap { ($0 as? any AutoModule.Type)?.init().module }
+            .compactMap { ($0 as? any AutoModule.Type)?.module }
     }
 }
 
