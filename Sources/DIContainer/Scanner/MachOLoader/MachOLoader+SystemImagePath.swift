@@ -5,6 +5,7 @@
 //  Created by minsOne on 1/8/25.
 //
 
+#if DEBUG
 extension MachOLoader {
     func isSystemImage(_ imageName: String) -> Bool {
         let systemImagePaths: [String] = [
@@ -17,3 +18,4 @@ extension MachOLoader {
         return systemImagePaths.contains { imageName.contains($0) }
     }
 }
+#endif
