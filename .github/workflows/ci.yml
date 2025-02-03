@@ -6,28 +6,15 @@ on:
 
 jobs:
   test:
-    runs-on: macos-14
+    runs-on: macos-latest
     env:
       CODECOV_PACKAGE_NAME: DIContainer
-    strategy:
-      matrix:
-        env:
-          - sdk: iphonesimulator
-            destination: platform=iOS Simulator,name=iPhone 11 Pro,OS=latest
 
     steps:
     - uses: actions/checkout@v1
-    - name: Select Xcode 16.0
-      run: sudo xcode-select -s /Applications/Xcode_16.0.app
-    - name: List SDKs and Devices
-      run: xcodebuild -showsdks
-
     - name: Build and Test
       run: |
         set -o pipefail && swift test --no-parallel --enable-code-coverage | xcpretty -c;
-      env:
-        SDK: ${{ matrix.env.sdk }}
-        DESTINATION: ${{ matrix.env.destination }}
 
     - name: Upload Code Coverage
       run: |
