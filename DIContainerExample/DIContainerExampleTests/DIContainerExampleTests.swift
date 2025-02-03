@@ -11,6 +11,7 @@ import XCTest
 @testable import DIContainerExample
 
 final class DIContainerExampleTests: XCTestCase {
+    @MainActor
     func testContainer() {
         let scanner = ModuleScanner()
         RegisterContainer().setup()

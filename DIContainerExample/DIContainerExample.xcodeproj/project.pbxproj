@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB27EC282D5138C4004AD45F /* DIContainer in Frameworks */ = {isa = PBXBuildFile; productRef = CB27EC272D5138C4004AD45F /* DIContainer */; };
 		CB2948202C0C4C2400F408B2 /* DIContainerExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB29481F2C0C4C2400F408B2 /* DIContainerExampleTests.swift */; };
 		CB5D7F7A2C0C48E300AA61C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5D7F792C0C48E300AA61C0 /* AppDelegate.swift */; };
 		CB5D7F7C2C0C48E300AA61C0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5D7F7B2C0C48E300AA61C0 /* SceneDelegate.swift */; };
@@ -14,7 +15,6 @@
 		CB5D7F812C0C48E300AA61C0 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = CB5D7F802C0C48E300AA61C0 /* Base */; };
 		CB5D7F832C0C48E400AA61C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB5D7F822C0C48E400AA61C0 /* Assets.xcassets */; };
 		CB5D7F862C0C48E400AA61C0 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = CB5D7F852C0C48E400AA61C0 /* Base */; };
-		CB5D7F8F2C0C490800AA61C0 /* DIContainer in Frameworks */ = {isa = PBXBuildFile; productRef = CB5D7F8E2C0C490800AA61C0 /* DIContainer */; };
 		CB5D7F952C0C495D00AA61C0 /* FooModuleFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5D7F942C0C495D00AA61C0 /* FooModuleFactory.swift */; };
 		CB5D7F9B2C0C4A3700AA61C0 /* FooService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5D7F9A2C0C4A3700AA61C0 /* FooService.swift */; };
 		CB5D7F9D2C0C4A5100AA61C0 /* FooServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5D7F9C2C0C4A5100AA61C0 /* FooServiceImpl.swift */; };
@@ -58,7 +58,6 @@
 		CB5D7FA22C0C4A7500AA61C0 /* BazService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BazService.swift; sourceTree = "<group>"; };
 		CB5D7FA32C0C4A7500AA61C0 /* BazModuleFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BazModuleFactory.swift; sourceTree = "<group>"; };
 		CB5D7FAA2C0C4B9B00AA61C0 /* RegisterContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterContainer.swift; sourceTree = "<group>"; };
-		CB5D7FB02C0C4BE700AA61C0 /* _.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = _.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,14 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB5D7F8F2C0C490800AA61C0 /* DIContainer in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CB5D7FAD2C0C4BE700AA61C0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				CB27EC282D5138C4004AD45F /* DIContainer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,7 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				CB5D7F762C0C48E300AA61C0 /* DIContainerExample.app */,
-				CB5D7FB02C0C4BE700AA61C0 /* _.xctest */,
 				CB29481D2C0C4C2400F408B2 /* DIContainerExampleTests.xctest */,
 			);
 			name = Products;
@@ -205,28 +196,11 @@
 			);
 			name = DIContainerExample;
 			packageProductDependencies = (
-				CB5D7F8E2C0C490800AA61C0 /* DIContainer */,
+				CB27EC272D5138C4004AD45F /* DIContainer */,
 			);
 			productName = DIContainerExample;
 			productReference = CB5D7F762C0C48E300AA61C0 /* DIContainerExample.app */;
 			productType = "com.apple.product-type.application";
-		};
-		CB5D7FAF2C0C4BE700AA61C0 /* _ */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CB5D7FB62C0C4BE700AA61C0 /* Build configuration list for PBXNativeTarget "_" */;
-			buildPhases = (
-				CB5D7FAC2C0C4BE700AA61C0 /* Sources */,
-				CB5D7FAD2C0C4BE700AA61C0 /* Frameworks */,
-				CB5D7FAE2C0C4BE700AA61C0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = _;
-			productName = JSInterfacePluginContainerExampleTests;
-			productReference = CB5D7FB02C0C4BE700AA61C0 /* _.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -245,9 +219,6 @@
 					CB5D7F752C0C48E300AA61C0 = {
 						CreatedOnToolsVersion = 15.3;
 					};
-					CB5D7FAF2C0C4BE700AA61C0 = {
-						CreatedOnToolsVersion = 15.3;
-					};
 				};
 			};
 			buildConfigurationList = CB5D7F712C0C48E300AA61C0 /* Build configuration list for PBXProject "DIContainerExample" */;
@@ -260,7 +231,7 @@
 			);
 			mainGroup = CB5D7F6D2C0C48E300AA61C0;
 			packageReferences = (
-				CB5D7F8D2C0C490800AA61C0 /* XCRemoteSwiftPackageReference "DIContainer" */,
+				CB27EC262D5138C4004AD45F /* XCLocalSwiftPackageReference "../../DIContainer" */,
 			);
 			productRefGroup = CB5D7F772C0C48E300AA61C0 /* Products */;
 			projectDirPath = "";
@@ -268,7 +239,6 @@
 			targets = (
 				CB5D7F752C0C48E300AA61C0 /* DIContainerExample */,
 				CB29481C2C0C4C2400F408B2 /* DIContainerExampleTests */,
-				CB5D7FAF2C0C4BE700AA61C0 /* _ */,
 			);
 		};
 /* End PBXProject section */
@@ -288,13 +258,6 @@
 				CB5D7F832C0C48E400AA61C0 /* Assets.xcassets in Resources */,
 				CB5D7F862C0C48E400AA61C0 /* Base in Resources */,
 				CB5D7F812C0C48E300AA61C0 /* Base in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CB5D7FAE2C0C4BE700AA61C0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,13 +289,6 @@
 				CB5D7FA92C0C4B0100AA61C0 /* BarServiceImpl.swift in Sources */,
 				CB5D7F7C2C0C48E300AA61C0 /* SceneDelegate.swift in Sources */,
 				CB5D7F9B2C0C4A3700AA61C0 /* FooService.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CB5D7FAC2C0C4BE700AA61C0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,40 +535,6 @@
 			};
 			name = Release;
 		};
-		CB5D7FB72C0C4BE700AA61C0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6794ZU679A;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kr.minsone.JSInterfacePluginContainerExampleTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		CB5D7FB82C0C4BE700AA61C0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6794ZU679A;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kr.minsone.JSInterfacePluginContainerExampleTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -643,32 +565,18 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CB5D7FB62C0C4BE700AA61C0 /* Build configuration list for PBXNativeTarget "_" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CB5D7FB72C0C4BE700AA61C0 /* Debug */,
-				CB5D7FB82C0C4BE700AA61C0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		CB5D7F8D2C0C490800AA61C0 /* XCRemoteSwiftPackageReference "DIContainer" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/minsOne/DIContainer";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.3;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		CB27EC262D5138C4004AD45F /* XCLocalSwiftPackageReference "../../DIContainer" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../DIContainer;
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		CB5D7F8E2C0C490800AA61C0 /* DIContainer */ = {
+		CB27EC272D5138C4004AD45F /* DIContainer */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = CB5D7F8D2C0C490800AA61C0 /* XCRemoteSwiftPackageReference "DIContainer" */;
 			productName = DIContainer;
 		};
 /* End XCSwiftPackageProductDependency section */

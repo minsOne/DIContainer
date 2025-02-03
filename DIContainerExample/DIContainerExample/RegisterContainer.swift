@@ -9,11 +9,13 @@ import DIContainer
 import Foundation
 
 struct RegisterContainer {
+    @MainActor
     func setup() {
         Container {
             FooModuleFactory().makeModule()
             BarModuleFactory().makeModule()
             BazModuleFactory().makeModule()
-        }.build()
+        }
+        .build()
     }
 }
