@@ -5,8 +5,8 @@ import XCTest
 
 @MainActor
 @Suite(.serialized)
-struct WeakInjectTest {
-    init() {
+class WeakInjectTest {
+    func registerContainer() {
         // Given
         Container {
             Module(WeakMockServiceKey.self) { WeakMockServiceImpl() }
@@ -20,6 +20,9 @@ struct WeakInjectTest {
 extension WeakInjectTest {
     @Test
     func containerRegistration1() {
+        // given
+        registerContainer()
+        
         // When
         let weakMockService = WeakMockServiceKey.module?.resolve()
         let weakMockServiceImpl = WeakMockServiceKey.module?.resolve() as? WeakMockServiceKey.Value
@@ -33,6 +36,9 @@ extension WeakInjectTest {
     
     @Test
     func containerRegistration2() throws {
+        // given
+        registerContainer()
+
         // When
         @WeakInject(WeakMockServiceKey.self) var service1
         @WeakInject(MockServiceKey.self) var service2
@@ -45,7 +51,21 @@ extension WeakInjectTest {
     }
     
     @Test
+    func containerRegistration3() throws {
+        // given
+        registerContainer()
+        
+        // Then
+        #expect(Container.isRegistered(WeakMockServiceKey.self))
+        #expect(Container.isRegistered(MockServiceKey.self))
+        #expect(Container.isRegistered(MockServiceFactoryKey.self))
+    }
+    
+    @Test
     func weakInjectBehavior1() throws {
+        // given
+        registerContainer()
+
         // When
         @WeakInject(WeakMockServiceKey.self) var _service1: WeakMockService?
         @WeakInject(MockServiceKey.self) var _service2: MockService?
@@ -74,6 +94,9 @@ extension WeakInjectTest {
     
     @Test
     func weakInjectBehavior2() throws {
+        // given
+        registerContainer()
+
         // When
         @WeakInject(WeakMockServiceKey.self) var _service1
         @WeakInject(MockServiceKey.self) var _service2
@@ -102,6 +125,9 @@ extension WeakInjectTest {
     
     @Test
     func factoryBehavior() throws {
+        // given
+        registerContainer()
+
         @WeakInject(MockServiceFactoryKey.self) var factory
         let _service1 = factory?.makeWeakService()
         let _service2 = factory?.makeWeakService()

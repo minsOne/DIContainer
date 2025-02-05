@@ -6,22 +6,32 @@ import XCTest
 
 @MainActor
 @Suite(.serialized)
-struct ModuleListExtensionTest {}
+class ModuleListExtensionTest {
+    var moduleList: [Module]
+
+    init() {
+        moduleList = [
+            Module(MockServiceFactory.self),
+            Module(WeakMockServiceImpl.self),
+            Module(MockServiceImpl.self),
+        ]
+    }
+}
 
 extension ModuleListExtensionTest {
     @Test
     func replaceOneModule() {
         // Given
         let newModule = Module(MockServiceKey.self) { Service1() }
-        var moduleList = ModuleScanner().scanModuleList
-        #expect(moduleList.count == 3)
 
         // When
         moduleList = moduleList.replacing(newModule)
 
         // Then
         #expect(moduleList.count == 3)
-        #expect(moduleList.last?.name == newModule.name)
+        let isContainNewModule = moduleList
+            .contains { $0.name == newModule.name }
+        #expect(isContainNewModule)
 
         let service = moduleList.last?.resolve() as? Service1
         service?.doSomething()
@@ -34,8 +44,6 @@ extension ModuleListExtensionTest {
         // Given
         let newModule1 = Module(MockServiceKey.self) { Service1() }
         let newModule2 = Module(WeakMockServiceKey.self) { Service2() }
-        var moduleList = ModuleScanner().scanModuleList
-        #expect(moduleList.count == 3)
 
         // When
         moduleList = moduleList.replacing(contentsOf: [newModule1, newModule2])

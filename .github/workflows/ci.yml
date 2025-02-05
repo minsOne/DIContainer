@@ -11,10 +11,13 @@ jobs:
       CODECOV_PACKAGE_NAME: DIContainer
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up Xcode
+      run: sudo xcode-select --switch /Applications/Xcode_16.2.app/Contents/Developer
     - name: Build and Test
       run: |
-        set -o pipefail && swift test --no-parallel --enable-code-coverage | xcpretty -c;
+        set -o pipefail && swift test --enable-code-coverage | xcpretty -c;
 
     - name: Upload Code Coverage
       run: |

@@ -5,6 +5,6 @@ import Foundation
 extension InjectionKeyType {
     @MainActor
     static var module: Module? {
-        return Container.root.module(Self.self)
+        Container.root.module(Self.self)
     }
 }

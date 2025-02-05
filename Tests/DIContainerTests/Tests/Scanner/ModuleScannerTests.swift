@@ -70,3 +70,28 @@ extension ModuleScannerTest {
         }
     }
 }
+
+extension ModuleScannerTest {
+    @Test
+    func generateNewInstanceFromContainer() throws {
+        Container.autoRegisterModules()
+
+        let _service1 = getMockService()
+        let _service2 = getMockService()
+
+        _service1.doSomething()
+        let service1 = try #require(_service1 as? MockServiceImpl)
+        #expect(service1.count == 1)
+
+        _service2.doSomething()
+        let service2 = try #require(_service2 as? MockServiceImpl)
+        #expect(service2.count == 1)
+
+        #expect((service1 === service2) == false)
+    }
+    
+    func getMockService() -> MockService {
+        @Inject(MockServiceKey.self) var service
+        return service
+    }
+}

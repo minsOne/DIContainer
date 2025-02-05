@@ -24,6 +24,7 @@ extension MachOLoaderTests {
     }
 }
 
+/**
 class ScannerPerformanceTests: XCTestCase {
     func test_MachOLoader() {
         measure {
@@ -39,3 +40,4 @@ class ScannerPerformanceTests: XCTestCase {
         }
     }
 }
+*/

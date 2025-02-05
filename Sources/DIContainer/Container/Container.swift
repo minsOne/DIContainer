@@ -49,6 +49,11 @@ extension Container {
     static func weakResolve<T, U: InjectionKeyType>(for type: U.Type) -> T? {
         root.module(type)?.resolve() as? T
     }
+    
+    /// Check if the dependency is registered in the container.
+    static func isRegistered<T: InjectionKeyType>(_ type: T.Type) -> Bool {
+        root.module(type) != nil
+    }
 
     func module<T: InjectionKeyType>(_ type: T.Type) -> Module? {
         let keyName = KeyName(type).name
@@ -96,7 +101,7 @@ public extension Container {
 @MainActor
 public extension Container {
     static func clear() {
-        root.modules.removeAll()
+        root = .init()
     }
 }
 
