@@ -10,18 +10,41 @@ import Testing
 @testable import DIContainer
 
 @Suite(.serialized)
+@MainActor
 struct KeyNameTests {
     @Test
-    func compare() {
-        let lhs = KeyName(NestedType.NestedTypeServiceKey.self)
-        let rhs = KeyName(NestedTypeServiceKey.self)
+    func compare_1() {
+        let lhs = KeyName(NestedType.NestedTypeServiceKey1.self)
+        let rhs = KeyName(NestedTypeServiceKey1.self)
 
         #expect(lhs.name != rhs.name)
+    }
+    
+    @Test
+    func compare_2() {
+        let lhs = KeyName(NestedType.NestedTypeServiceKey2.self)
+        let rhs = KeyName(NestedTypeServiceKey2.self)
+        
+        #expect(lhs.name == rhs.name)
     }
 }
 
 enum NestedType {
-    class NestedTypeServiceKey {}
+    class NestedTypeServiceKey1: InjectionKeyType {
+        typealias Value = Void
+    }
+
+    class NestedTypeServiceKey2: InjectionKeyType {
+        typealias Value = Void
+        static var nameOverride: String? { "NestedTypeServiceKey2" }
+    }
 }
 
-class NestedTypeServiceKey {}
+class NestedTypeServiceKey1: InjectionKeyType {
+    typealias Value = Void
+}
+
+class NestedTypeServiceKey2: InjectionKeyType {
+    typealias Value = Void
+    static var nameOverride: String? { "NestedTypeServiceKey2" }
+}

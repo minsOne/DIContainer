@@ -15,6 +15,7 @@ public protocol AutoModulable: AnyObject {
 public typealias AutoModule = AutoModulable & AutoModuleBase
 
 #if DEBUG
+@MainActor
 extension AutoModulable where Self: AutoModuleBase {
     static var module: Module? {
         Self().module
@@ -22,6 +23,7 @@ extension AutoModulable where Self: AutoModuleBase {
 }
 
 extension AutoModulable {
+    @MainActor
     private var module: Module? {
         guard
             let instance = self as? ModuleKeyType.Value,

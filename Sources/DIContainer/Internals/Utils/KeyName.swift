@@ -1,8 +1,9 @@
 import Foundation
 
+@MainActor
 struct KeyName {
     let name: String
-    init(_ type: AnyObject.Type) {
-        name = NSStringFromClass(type)
+    init<T: InjectionKeyType> (_ type: T.Type) {
+        name = type.nameOverride ?? NSStringFromClass(type)
     }
 }

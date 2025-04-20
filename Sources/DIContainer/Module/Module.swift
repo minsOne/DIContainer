@@ -1,10 +1,12 @@
 import Foundation
 
 /// A type that contributes to the object graph.
+@preconcurrency
 public struct Module: Hashable {
     let name: String
     let resolve: () -> Any
 
+    @MainActor
     public init<T: InjectionKeyType, U>(
         _ keyType: T.Type,
         _ resolve: @escaping () -> U
@@ -13,6 +15,7 @@ public struct Module: Hashable {
         self.init(name: name, resolve: resolve)
     }
 
+    @MainActor
     public init<T: AutoModule>(_ moduleType: T.Type) {
         let name = KeyName(moduleType.ModuleKeyType.self).name
         self.init(name: name, resolve: {
@@ -20,6 +23,7 @@ public struct Module: Hashable {
         })
     }
 
+    @MainActor
     init(name: String, resolve: @escaping () -> Any) {
         self.name = name
         self.resolve = resolve

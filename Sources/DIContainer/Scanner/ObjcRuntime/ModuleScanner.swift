@@ -126,6 +126,7 @@ public struct ModuleScanner {
         return modules
     }
 
+    @MainActor
     public var scanModuleList: [Module] {
         scanModuleTypeList
             .compactMap { ($0 as? any AutoModule.Type)?.module }

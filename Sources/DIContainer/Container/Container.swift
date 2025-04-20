@@ -2,13 +2,13 @@ import Foundation
 
 public class Container {
     @MainActor
-    private(set) static var root = Container()
+    static var root = Container()
 
     /// Stored object instance factories.
-    var modules: [String: Module] = [:]
+    var _storage: [String: Module] = [:]
 
     public init() {}
-    deinit { modules.removeAll() }
+    deinit { _storage.removeAll() }
 }
 
 public extension Container {
@@ -16,10 +16,10 @@ public extension Container {
     @discardableResult
     func register(module: Module) -> Self {
         let key = module.name
-        if let _ = modules[key] {
+        if let _ = _storage[key] {
             assertionFailure("\(key) Key is existed. Please check module \(module)")
         }
-        modules[key] = module
+        _storage[key] = module
         return self
     }
 
@@ -49,7 +49,7 @@ extension Container {
     static func weakResolve<T, U: InjectionKeyType>(for type: U.Type) -> T? {
         root.module(type)?.resolve() as? T
     }
-    
+
     /// Check if the dependency is registered in the container.
     static func isRegistered<T: InjectionKeyType>(_ type: T.Type) -> Bool {
         root.module(type) != nil
@@ -57,7 +57,7 @@ extension Container {
 
     func module<T: InjectionKeyType>(_ type: T.Type) -> Module? {
         let keyName = KeyName(type).name
-        return modules[keyName]
+        return _storage[keyName]
     }
 }
 
@@ -95,14 +95,16 @@ public extension Container {
         // Used later in property wrapper
         Self.root = self
     }
-}
 
-#if DEBUG
-@MainActor
-public extension Container {
-    static func clear() {
-        root = .init()
+    static subscript<T: InjectionKeyType>(_ type: T.Type) -> T.Value {
+        resolve(for: type)
+    }
+
+    var count: Int {
+        _storage.count
+    }
+
+    var isEmpty: Bool {
+        _storage.isEmpty
     }
 }
-
-#endif

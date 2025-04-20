@@ -16,7 +16,7 @@ public class WeakInject<Value> {
 
     public init<K>(_ key: K.Type) where K: InjectionKeyType, Value == K.Value {
         lazyValue = {
-            key.weakValue
+            Container.weakResolve(for: K.self)
         }
     }
 }

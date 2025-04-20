@@ -58,6 +58,7 @@ public extension MachOLoader {
         return results
     }
 
+    @MainActor
     var scanModuleList: [Module] {
         scanModuleTypeList
             .compactMap { ($0 as? any AutoModule.Type)?.module }

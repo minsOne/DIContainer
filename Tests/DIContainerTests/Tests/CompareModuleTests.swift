@@ -10,6 +10,7 @@ import Testing
 @testable import DIContainer
 
 @Suite(.serialized)
+@MainActor
 struct CompareModuleTests {
     @Test
     func compare() {

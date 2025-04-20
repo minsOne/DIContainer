@@ -51,6 +51,8 @@ Then get an instance from the container.
 @Inject(AnimalKey.self)
 var cat: Meow
 cat.doSomething() // prints "Meow.."
+// or
+Container[AnimalKey.self].doSomething() // prints "Meow.."
 ```
 
 Where definitions of the protocols and struct are
@@ -113,4 +115,5 @@ The DIContainer are inspired by:
 * [mikeash.com - Friday Q&A 2014-08-08: Swift Name Mangling](https://mikeash.com/pyblog/friday-qa-2014-08-15-swift-name-mangling.html)
 * [Wikipedia - Name mangling](https://en.wikipedia.org/wiki/Name_mangling#Swift)
 * [Github - DerekSelander/dsdump](https://github.com/DerekSelander/dsdump)
+* [Github - Apple/swift-service-context](https://github.com/apple/swift-service-context)
 * [Building a class-dump in 2020](https://derekselander.github.io/dsdump/)
