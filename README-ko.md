@@ -11,7 +11,8 @@ Swift 의존성 주입 컨테이너는 Swift 애플리케이션에서 의존성 
 - 편리한 의존성 주입을 위한 프로퍼티 래퍼.
 - 동적 모듈 등록 및 관리.
 - 선언적 모듈 등록을 위한 결과 빌더 구문.
-- 모듈 및 주입 키 스캐닝을 위한 디버그 유틸리티.
+- 주입 키와 자동 모듈을 발견하는 디버그 전용 스캐너.
+- `AutoModule`과 `Container.autoRegisterModules()`를 통한 디버그 빌드 자동 모듈 등록.
 
 ## 요구사항
 
@@ -70,6 +71,68 @@ struct Cat: Meow {
 }
 ```
 
+### Scanner와 자동 모듈 등록
+
+DIContainer는 로드된 앱에서 주입 키와 자동 모듈을 발견하는 디버그 전용 스캐너를 제공합니다.
+
+- `ModuleScanner`는 Objective-C 런타임으로 클래스를 스캔합니다.
+- `MachOLoader`는 로드된 Mach-O 이미지의 Swift 메타데이터를 스캔합니다.
+- `Container.autoRegisterModules()`는 스캔된 `AutoModule` 구현체 타입을 `Module`로 변환해 컨테이너를 구성합니다.
+
+키와 구현체의 역할은 서로 다릅니다.
+
+- `InjectionKey`는 의존성 계약을 정의합니다. `Value`는 보통 호출자가 의존하는 프로토콜이나 추상 타입입니다.
+- `AutoModule` 구현체는 실제 생성될 구체 타입입니다. `ModuleKeyType`은 이 구현체를 어떤 키로 등록할지 스캐너에게 알려줍니다.
+- `keyList`는 진단에 유용하지만, 자동 등록은 스캔된 `AutoModule` 구현체와 그 구현체의 `ModuleKeyType`을 기준으로 동작합니다.
+
+아래 예제에서 `FooServiceKey`는 `FooService`를 resolve 가능한 타입으로 노출하고, `FooServiceImpl`은 스캐너가 발견하는 실제 구현체입니다.
+
+```swift
+final class FooServiceKey: InjectionKey {
+    typealias Value = FooService
+}
+
+protocol FooService {
+    func doSomething()
+}
+
+final class FooServiceImpl: AutoModule, FooService {
+    typealias ModuleKeyType = FooServiceKey
+
+    func doSomething() {
+        print("Foo")
+    }
+}
+```
+
+스캔 이후 DIContainer는 이 구현체를 다음과 같은 명시 등록과 같은 의미로 다룹니다.
+
+```swift
+Module(FooServiceKey.self) {
+    FooServiceImpl()
+}
+// or
+Module(FooServiceImpl.self)
+```
+
+그다음 디버그 composition root에서 스캔된 모듈을 자동 등록할 수 있습니다.
+
+```swift
+#if DEBUG
+Container.autoRegisterModules()
+#endif
+```
+
+스캔 결과를 직접 확인할 수도 있습니다.
+
+```swift
+let keys = ModuleScanner().keyList
+let modules = ModuleScanner().scanModuleList
+Container(modules: modules).build()
+```
+
+Scanner API는 `#if DEBUG`에서만 컴파일됩니다. 진단, 데모, 테스트 등록에는 유용하지만, 프로덕션 composition은 명시적으로 구성하고 테스트로 보호하는 것을 권장합니다.
+
 ### Test
 
 ```shell
@@ -111,5 +174,10 @@ DIContainer는 다음 자료에서 영감을 받았습니다:
 * [Nest.js는 실제로 어떻게 의존성을 주입해줄까?](https://velog.io/@coalery/nest-injection-how)
 * [mikeash.com - Friday Q&A 2014-08-08: Swift Name Mangling](https://mikeash.com/pyblog/friday-qa-2014-08-15-swift-name-mangling.html)
 * [Wikipedia - Name mangling](https://en.wikipedia.org/wiki/Name_mangling#Swift)
+* [Github - Apple/swift-service-context](https://github.com/apple/swift-service-context)
+* [Github - baidu/CarbonGraph](https://github.com/baidu/CarbonGraph)
 * [Github - DerekSelander/dsdump](https://github.com/DerekSelander/dsdump)
+* [Github - p-x9/MachOKit](https://github.com/p-x9/MachOKit)
+* [Github - SpectralDragon/DITranquillity](https://github.com/SpectralDragon/DITranquillity)
+* [Github - ukhsa-collaboration/covid-19-app-ios-ag-public](https://github.com/ukhsa-collaboration/covid-19-app-ios-ag-public)
 * [Building a class-dump in 2020](https://derekselander.github.io/dsdump/)

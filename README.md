@@ -12,7 +12,8 @@ The Swift Dependency Injection Container is a lightweight and flexible library d
 - Property wrappers for convenient dependency injection.
 - Dynamic module registration and management.
 - Result builder syntax for declarative module registration.
-- Debug utilities for module and injection key scanning.
+- Debug-only scanners for discovering injection keys and auto modules.
+- Automatic module registration for debug builds via `AutoModule` and `Container.autoRegisterModules()`.
 
 ## Requirements
 
@@ -73,6 +74,68 @@ struct Cat: Meow {
 }
 ```
 
+### Scanner and Automatic Module Registration
+
+DIContainer includes debug-only scanners that discover injection keys and auto modules from the loaded app:
+
+- `ModuleScanner` uses the Objective-C runtime to scan classes.
+- `MachOLoader` scans Swift metadata from loaded Mach-O images.
+- `Container.autoRegisterModules()` builds a container by converting scanned `AutoModule` implementation types into `Module` values.
+
+The key and the implementation have different responsibilities:
+
+- An `InjectionKey` defines the dependency contract. Its `Value` is usually a protocol or abstract type that callers depend on.
+- An `AutoModule` implementation provides the concrete type. Its `ModuleKeyType` tells the scanner which key should be used for registration.
+- `keyList` is useful for diagnostics, but automatic registration is driven by scanned `AutoModule` implementations and their `ModuleKeyType`.
+
+In the example below, `FooServiceKey` exposes `FooService` as the resolvable type, and `FooServiceImpl` is the concrete implementation discovered by the scanner.
+
+```swift
+final class FooServiceKey: InjectionKey {
+    typealias Value = FooService
+}
+
+protocol FooService {
+    func doSomething()
+}
+
+final class FooServiceImpl: AutoModule, FooService {
+    typealias ModuleKeyType = FooServiceKey
+
+    func doSomething() {
+        print("Foo")
+    }
+}
+```
+
+After scanning, DIContainer treats the implementation like this explicit registration:
+
+```swift
+Module(FooServiceKey.self) {
+    FooServiceImpl() as FooService
+}
+// or
+Module(FooServiceImpl.self)
+```
+
+Then register all scanned modules in a debug composition root.
+
+```swift
+#if DEBUG
+Container.autoRegisterModules()
+#endif
+```
+
+You can also inspect scan results directly.
+
+```swift
+let keys = ModuleScanner().keyList
+let modules = ModuleScanner().scanModuleList
+Container(modules: modules).build()
+```
+
+Scanner APIs are compiled only under `#if DEBUG`. They are useful for diagnostics and demo/test registration, while production composition should remain explicit and covered by tests.
+
 ### Test
 
 ```shell
@@ -114,6 +177,10 @@ The DIContainer are inspired by:
 * [Nest.js는 실제로 어떻게 의존성을 주입해줄까?](https://velog.io/@coalery/nest-injection-how)
 * [mikeash.com - Friday Q&A 2014-08-08: Swift Name Mangling](https://mikeash.com/pyblog/friday-qa-2014-08-15-swift-name-mangling.html)
 * [Wikipedia - Name mangling](https://en.wikipedia.org/wiki/Name_mangling#Swift)
-* [Github - DerekSelander/dsdump](https://github.com/DerekSelander/dsdump)
 * [Github - Apple/swift-service-context](https://github.com/apple/swift-service-context)
+* [Github - baidu/CarbonGraph](https://github.com/baidu/CarbonGraph)
+* [Github - DerekSelander/dsdump](https://github.com/DerekSelander/dsdump)
+* [Github - p-x9/MachOKit](https://github.com/p-x9/MachOKit)
+* [Github - SpectralDragon/DITranquillity](https://github.com/SpectralDragon/DITranquillity)
+* [Github - ukhsa-collaboration/covid-19-app-ios-ag-public](https://github.com/ukhsa-collaboration/covid-19-app-ios-ag-public)
 * [Building a class-dump in 2020](https://derekselander.github.io/dsdump/)
